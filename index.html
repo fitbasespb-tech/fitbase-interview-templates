@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fitbase — шаблоны интервью</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+    color: #1a1d24;
+    background: linear-gradient(180deg, #f5f6f8 0%, #eef0f5 100%);
+    line-height: 1.55;
+    font-size: 15px;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 60px 24px 80px; }
+
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .logo {
+    display: inline-block;
+    background: #1a1d24;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-size: 36px;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+  }
+  .lede {
+    font-size: 16px;
+    color: #4d5563;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .grid {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .card {
+    background: white;
+    border-radius: 18px;
+    padding: 26px 30px;
+    border: 1px solid #e4e6eb;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(26, 29, 36, 0.08);
+    border-color: #d4d7dd;
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    text-transform: uppercase;
+  }
+  .tag-research { background: #fef3c7; color: #92400e; }
+  .tag-case { background: #fce7f3; color: #9d174d; }
+  .duration-tag {
+    font-size: 11px;
+    color: #6b7280;
+    background: #eef0f3;
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-weight: 600;
+  }
+  h2 {
+    font-size: 22px;
+    line-height: 1.3;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .card-desc {
+    color: #4d5563;
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+  .audience {
+    font-size: 12px;
+    color: #6b7280;
+    border-top: 1px solid #eef0f3;
+    padding-top: 12px;
+    margin-top: 14px;
+  }
+  .audience strong { color: #1a1d24; }
+
+  .accent-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+  }
+  .accent-research { background: #f59e0b; }
+  .accent-studio { background: #db2777; }
+  .accent-volk { background: #047857; }
+
+  .arrow {
+    font-size: 18px;
+    color: #9ca3af;
+    transition: transform 0.2s;
+    display: inline-block;
+    margin-left: 4px;
+  }
+  .card:hover .arrow {
+    transform: translateX(4px);
+    color: #1a1d24;
+  }
+
+  /* FEATURES */
+  .features {
+    background: white;
+    border-radius: 18px;
+    padding: 26px 30px;
+    border: 1px solid #e4e6eb;
+    margin-bottom: 24px;
+  }
+  .features h3 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #6b7280;
+    margin-bottom: 14px;
+  }
+  .features ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .features li {
+    font-size: 14px;
+    color: #4d5563;
+    padding-left: 26px;
+    position: relative;
+  }
+  .features li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 18px;
+    height: 18px;
+    background: #d4f4dd;
+    color: #207533;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 18px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* METHODOLOGY */
+  .method {
+    background: #1a1d24;
+    color: white;
+    border-radius: 18px;
+    padding: 26px 30px;
+    margin-bottom: 24px;
+  }
+  .method h3 {
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #fbbf24;
+    margin-bottom: 14px;
+  }
+  .method p {
+    color: #d6d9df;
+    font-size: 14.5px;
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+  .method .forces {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .method .force {
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .method .force-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .force-push .force-label { color: #fca5a5; }
+  .force-pull .force-label { color: #86efac; }
+  .force-anxiety .force-label { color: #fcd34d; }
+  .force-inertia .force-label { color: #93c5fd; }
+  .method .force-val { color: white; font-size: 13.5px; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid #e4e6eb;
+    color: #6b7280;
+    font-size: 13px;
+  }
+  footer a {
+    color: #1a1d24;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 40px 16px 60px; }
+    h1 { font-size: 26px; }
+    .card { padding: 20px 22px; }
+    h2 { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo">FITBASE · INTERVIEW TEMPLATES</div>
+    <h1>Шаблоны интервью</h1>
+    <p class="lede">
+      HTML-инструменты для проведения JTBD, switch и кейс-интервью с клиентами Fitbase.
+      Открываются в браузере, работают офлайн, заметки сохраняются автоматически.
+    </p>
+  </header>
+
+  <div class="grid">
+
+    <a href="levita_switch_interview.html" class="card">
+      <span class="accent-bar accent-research"></span>
+      <div class="card-head">
+        <span class="tag tag-research">🔬 Исследование</span>
+        <span class="duration-tag">40 мин</span>
+      </div>
+      <h2>Switch-интервью: Левита → Listok+АМО → Fitbase <span class="arrow">→</span></h2>
+      <p class="card-desc">
+        Внутреннее исследование по методологии 4 сил Замесина.
+        Прокапывает причины выхода из франшизы Левиты, переход на Listok СРМ + AmoCRM,
+        затем — почему Fitbase. Фокус на работах ЛПР: что не выполнялось раньше и как сейчас.
+      </p>
+      <div class="audience">
+        <strong>Для:</strong> бывшие франчайзи Левиты, которые перешли на Fitbase
+      </div>
+    </a>
+
+    <a href="case_subscription_studio.html" class="card">
+      <span class="accent-bar accent-studio"></span>
+      <div class="card-head">
+        <span class="tag tag-case">📰 Публикуемый кейс</span>
+        <span class="duration-tag">40 мин</span>
+      </div>
+      <h2>Кейс: студия — переход на подписки <span class="arrow">→</span></h2>
+      <p class="card-desc">
+        Универсальный шаблон под публикуемый кейс о переходе студии (пилатес, йога, танцы) с классической модели абонементов на подписку.
+        Структура «ДО → решение → как → после → совет», цветные маркеры цитат и цифр для статьи.
+      </p>
+      <div class="audience">
+        <strong>Для:</strong> студии S1 (пилатес, йога, танцы, стрейчинг) на подписочной модели
+      </div>
+    </a>
+
+    <a href="case_volk_crossfit.html" class="card">
+      <span class="accent-bar accent-volk"></span>
+      <div class="card-head">
+        <span class="tag tag-case">📰 Публикуемый кейс</span>
+        <span class="duration-tag">40 мин</span>
+      </div>
+      <h2>Кейс: VOLK™ CrossFit — переход на подписки <span class="arrow">→</span></h2>
+      <p class="card-desc">
+        Специализированный шаблон под VOLK CrossFit. Учитывает специфику кроссфита:
+        мини-группы с лимитом мест, бронирование, психология блоков 4/8/12/16 vs GREY/WHITE подписка,
+        комьюнити, изменение ЗП тренеров, детская секция «Волчата».
+      </p>
+      <div class="audience">
+        <strong>Для:</strong> VOLK™ CrossFit и подобные CrossFit-клубы / залы единоборств
+      </div>
+    </a>
+
+  </div>
+
+  <div class="features">
+    <h3>Что есть в каждом шаблоне</h3>
+    <ul>
+      <li>Sticky-таймер с подсветкой при перегреве 30+ и 38+ мин</li>
+      <li>Навигация по секциям с прогрессом</li>
+      <li>Поля заметок с автосохранением в localStorage</li>
+      <li>Цветные маркеры: ★ ключевой · 🔊 цитата · 📊 цифры</li>
+      <li>Чек-листы разрешений и материалов</li>
+      <li>Экспорт всех заметок в Markdown в один клик</li>
+      <li>Адаптация под мобильный</li>
+      <li>Стиль для печати — бумажная копия как запасной план</li>
+    </ul>
+  </div>
+
+  <div class="method">
+    <h3>⚡ Методология — Switch по Замесину</h3>
+    <p>
+      В основе исследовательских шаблонов — <strong>анализ 4 сил</strong>, которые двигают пользователя через переход:
+    </p>
+    <div class="forces">
+      <div class="force force-push">
+        <div class="force-label">🔴 Push</div>
+        <div class="force-val">Что выталкивает из старого</div>
+      </div>
+      <div class="force force-pull">
+        <div class="force-label">🟢 Pull</div>
+        <div class="force-val">Что притягивает к новому</div>
+      </div>
+      <div class="force force-anxiety">
+        <div class="force-label">🟡 Anxiety</div>
+        <div class="force-val">Чего боялись</div>
+      </div>
+      <div class="force force-inertia">
+        <div class="force-label">🔵 Inertia</div>
+        <div class="force-val">Что почти удержало</div>
+      </div>
+    </div>
+    <p style="margin-top: 16px;">
+      Кейс-интервью используют структуру <strong>«ДО → решение → как → после → совет»</strong> с фокусом на цитаты, цифры и сцены, которые попадут в статью.
+    </p>
+  </div>
+
+  <footer>
+    <p>
+      Создаются и поддерживаются командой маркетинга
+      <a href="https://fitbase.io" target="_blank">Fitbase</a> ·
+      <a href="https://github.com/fitbasespb-tech/fitbase-interview-templates" target="_blank">GitHub</a>
+    </p>
+  </footer>
+
+</div>
+</body>
+</html>
