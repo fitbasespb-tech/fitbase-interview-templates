@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOLK CrossFit — 7 вопросов для голосовых</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+    color: #1a1d24;
+    background: #f5f6f8;
+    line-height: 1.6;
+    font-size: 16px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 40px 22px 80px; }
+
+  /* HEADER */
+  .hero {
+    background: #1a1d24;
+    color: white;
+    border-radius: 22px;
+    padding: 32px 32px 28px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: "🐺";
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    font-size: 110px;
+    opacity: 0.12;
+    transform: rotate(15deg);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-size: 26px;
+    line-height: 1.2;
+    font-weight: 800;
+    margin-bottom: 10px;
+    letter-spacing: -0.3px;
+  }
+  .hero p {
+    color: #d6d9df;
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 560px;
+  }
+
+  /* HOW TO BLOCK */
+  .how {
+    background: white;
+    border-radius: 18px;
+    padding: 22px 26px;
+    margin-bottom: 24px;
+    border: 1px solid #e4e6eb;
+  }
+  .how h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #6b7280;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .how ol {
+    padding-left: 22px;
+    color: #4d5563;
+    font-size: 14.5px;
+  }
+  .how li { margin: 6px 0; }
+  .how strong { color: #1a1d24; }
+
+  /* QUESTION CARDS */
+  .qcard {
+    background: white;
+    border-radius: 18px;
+    padding: 26px 30px;
+    margin-bottom: 16px;
+    border: 1px solid #e4e6eb;
+    position: relative;
+  }
+  .qhead {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .qnum {
+    background: #1a1d24;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .qtopic {
+    font-size: 11px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    font-weight: 700;
+  }
+  .qbody {
+    font-size: 16.5px;
+    line-height: 1.6;
+    color: #1a1d24;
+    font-weight: 500;
+  }
+  .qhints {
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: #f7f9fb;
+    border-radius: 10px;
+    font-size: 13.5px;
+    color: #4d5563;
+    line-height: 1.55;
+  }
+  .qhints-label {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: #6b7280;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  /* TOPIC COLORS */
+  .topic-before { color: #c4302b; }
+  .topic-decision { color: #b8580a; }
+  .topic-process { color: #2563eb; }
+  .topic-after { color: #047857; }
+  .topic-advice { color: #db2777; }
+
+  /* CLOSING */
+  .thanks {
+    background: linear-gradient(135deg, #fdf2f8 0%, #ecf3ff 100%);
+    border-radius: 18px;
+    padding: 28px 30px;
+    margin-top: 24px;
+    text-align: center;
+  }
+  .thanks h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+  .thanks p {
+    color: #4d5563;
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 540px;
+    margin: 0 auto 16px;
+  }
+  .contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #1a1d24;
+    color: white;
+    text-decoration: none;
+    padding: 12px 22px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: transform 0.2s;
+  }
+  .contact:hover { transform: translateY(-2px); }
+
+  /* MATERIALS */
+  .materials {
+    background: white;
+    border-radius: 18px;
+    padding: 22px 26px;
+    margin-top: 16px;
+    border: 1px solid #e4e6eb;
+  }
+  .materials h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: #6b7280;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .materials ul {
+    list-style: none;
+    color: #4d5563;
+    font-size: 14.5px;
+  }
+  .materials li {
+    padding: 5px 0 5px 24px;
+    position: relative;
+  }
+  .materials li::before {
+    content: "📎";
+    position: absolute;
+    left: 0;
+    top: 5px;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding-top: 24px;
+    color: #6b7280;
+    font-size: 12.5px;
+  }
+  footer a { color: #1a1d24; }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 24px 14px 60px; }
+    .hero { padding: 24px 22px 22px; border-radius: 18px; }
+    .hero h1 { font-size: 22px; }
+    .qcard { padding: 20px 22px; border-radius: 14px; }
+    .qbody { font-size: 15.5px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="badge">7 ВОПРОСОВ · 10–15 МИНУТ</span>
+    <h1>Как VOLK перешёл на подписку — ваша история голосом</h1>
+    <p>
+      Жаль, что не получилось созвониться — давайте сделаем проще. Запишите голосовые ответы на 7 вопросов ниже, в удобное время. На каждый — 1–2 минуты. Из ваших ответов соберу кейс и пришлю на согласование до публикации.
+    </p>
+  </div>
+
+  <div class="how">
+    <h3>Как это работает</h3>
+    <ol>
+      <li>Запишите <strong>7 голосовых сообщений</strong> в Telegram — по одному на вопрос. Можно подряд или в течение пары дней.</li>
+      <li>Каждый ответ — <strong>1–2 минуты</strong>. Не нужно идеально, говорите свободно.</li>
+      <li>Если вспомните конкретные цифры или сцены — <strong>пришлите отдельным голосовым</strong>, добавлю.</li>
+      <li>Я соберу кейс и <strong>покажу до публикации</strong>. Имя клуба — только с вашего разрешения.</li>
+    </ol>
+  </div>
+
+  <!-- Q1 -->
+  <div class="qcard">
+    <div class="qhead">
+      <div class="qnum">1</div>
+      <div class="qtopic topic-before">Блочная система ДО</div>
+    </div>
+    <div class="qbody">
+      Расскажите, как клуб работал до подписки — на блоках 4/8/12/16. Что покупали чаще? И что в этом раздражало — клуб или клиентов?
+    </div>
+    <div class="qhints">
+      <span class="qhints-label">Если вспомните, было бы здорово услышать</span>
+      Конкретный момент, когда поняли, что блоки больше не работают. Какая ситуация подсветила проблему.
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="qcard">
+    <div class="qhead">
+      <div class="qnum">2</div>
+      <div class="qtopic topic-decision">Решение перейти</div>
+    </div>
+    <div class="qbody">
+      Когда начали думать о подписке — кто или что подтолкнуло? Сами поняли, видели у коллег, читали статью? И что больше всего пугало в самом переходе?
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="qcard">
+    <div class="qhead">
+      <div class="qnum">3</div>
+      <div class="qtopic topic-process">Архитектура GREY и WHITE</div>
+    </div>
+    <div class="qbody">
+      Почему пришли именно к двум линиям — GREY (с тренером) и WHITE (самостоятельные)? Что включено в каждую, чем они отличаются для клиента?
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="qcard">
+    <div class="qhead">
+      <div class="qnum">4</div>
+      <div class="qtopic topic-process">Бронирование в мини-группах</div>
+    </div>
+    <div class="qbody">
+      В CrossFit мест на тренировке ограничено. Как организовали бронирование при подписке — лимиты в неделю, правила «не пришёл», как технически? Не возникло ли перегруза часов пик?
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="qcard">
+    <div class="qhead">
+      <div class="qnum">5</div>
+      <div class="qtopic topic-process">Переход действующих клиентов и тренеры</div>
+    </div>
+    <div class="qbody">
+      Что делали с теми, у кого был активный блок — как объясняли, как реагировали? И как изменилась ЗП-модель тренеров (если изменилась) — они согласовали?
+    </div>
+    <div class="qhints">
+      <span class="qhints-label">Подсказка</span>
+      Если кто-то наотрез отказался или, наоборот, был полный энтузиазм — конкретные истории сильнее всего работают.
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="qcard">
+    <div class="qhead">
+      <div class="qnum">6</div>
+      <div class="qtopic topic-after">Что получилось</div>
+    </div>
+    <div class="qbody">
+      Спустя время на подписке — что изменилось? Если можно — конкретные цифры (можно в процентах): выручка, частота визитов, retention. И главное — изменилось ли поведение клиентов?
+    </div>
+    <div class="qhints">
+      <span class="qhints-label">Что особенно интересно</span>
+      Стали ли клиенты больше «членами клуба», меньше «считают тренировки»? Это самое сильное в кейсе.
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="qcard">
+    <div class="qhead">
+      <div class="qnum">7</div>
+      <div class="qtopic topic-advice">Совет другим клубам</div>
+    </div>
+    <div class="qbody">
+      Что бы вы сказали другому CrossFit-клубу, который сейчас думает о переходе на подписку? Какая главная вещь, которую упустили на старте? И кому такая модель НЕ подходит?
+    </div>
+  </div>
+
+  <!-- THANKS + CONTACT -->
+  <div class="thanks">
+    <h2>🙏 Спасибо за время!</h2>
+    <p>
+      Если по ходу всплывут детали или цифры, которые хочется добавить — просто отдельным голосовым, не стесняйтесь.
+      Кейс публикуем не раньше, чем согласуем с вами.
+    </p>
+    <a href="https://t.me/Roman_Semenov" class="contact">→ Прислать голосовые в Telegram</a>
+  </div>
+
+  <div class="materials">
+    <h3>Если будет возможность</h3>
+    <ul>
+      <li>Фото зала VOLK (внутри, тренировка, оборудование)</li>
+      <li>Логотип в PNG или SVG</li>
+      <li>Фото команды тренеров — для атрибуции цитат</li>
+      <li>Скриншот тарифной сетки в актуальной версии</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>
+      <a href="https://fitbase.io" target="_blank">Fitbase</a> · кейс-команда
+    </p>
+  </footer>
+
+</div>
+</body>
+</html>
