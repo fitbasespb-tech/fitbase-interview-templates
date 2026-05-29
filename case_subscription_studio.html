@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кейс-интервью: Студия — переход на подписки</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+    color: #1a1d24;
+    background: #f5f6f8;
+    line-height: 1.55;
+    font-size: 15px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* TOP / TIMER */
+  .top {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #e4e6eb;
+    padding: 14px 24px;
+    margin-bottom: 24px;
+  }
+  .top-inner { max-width: 980px; margin: 0 auto; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .title-row { flex: 1; min-width: 260px; }
+  .title { font-size: 15px; font-weight: 700; line-height: 1.3; }
+  .subtitle { font-size: 12px; color: #6b7280; margin-top: 2px; }
+  .timer-box {
+    display: flex; align-items: center; gap: 8px;
+    background: #1a1d24; color: white;
+    padding: 8px 14px; border-radius: 100px;
+    font-weight: 600; font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  .timer-box.warn { background: #b8580a; }
+  .timer-box.crit { background: #c4302b; }
+  .timer-btn {
+    background: rgba(255,255,255,0.18);
+    border: none; color: white;
+    padding: 4px 10px; border-radius: 100px;
+    font-size: 11px; font-weight: 600; cursor: pointer;
+    letter-spacing: 0.3px;
+  }
+  .timer-btn:hover { background: rgba(255,255,255,0.28); }
+
+  .nav { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .nav a {
+    text-decoration: none; font-size: 11px; color: #6b7280;
+    background: #eef0f3; padding: 4px 10px; border-radius: 100px;
+    transition: all 0.15s; font-weight: 500;
+  }
+  .nav a:hover { background: #e0e3e8; color: #1a1d24; }
+  .nav a.done { background: #d4f4dd; color: #207533; }
+
+  /* INTRO */
+  .intro {
+    background: white; border-radius: 16px;
+    padding: 22px 26px; margin-bottom: 20px;
+    border: 1px solid #e4e6eb;
+  }
+  .intro h1 { font-size: 22px; line-height: 1.25; font-weight: 700; margin-bottom: 8px; }
+  .intro .lede {
+    color: #4d5563; font-size: 14px;
+    padding: 12px 14px;
+    background: #fff8e6;
+    border-left: 3px solid #f0a500;
+    border-radius: 6px; margin-top: 14px;
+  }
+  .intro .stem {
+    background: #ecf3ff;
+    border-left: 3px solid #2563eb;
+    padding: 12px 14px; border-radius: 6px;
+    margin-top: 10px; font-size: 14px;
+  }
+  .intro .case-flag {
+    background: #fdf2f8;
+    border-left: 3px solid #db2777;
+    padding: 12px 14px; border-radius: 6px;
+    margin-top: 10px; font-size: 14px;
+  }
+
+  /* SECTIONS */
+  .section {
+    background: white; border-radius: 14px;
+    padding: 22px 26px; margin-bottom: 16px;
+    border: 1px solid #e4e6eb;
+  }
+  .section-head {
+    display: flex; align-items: center; gap: 12px;
+    flex-wrap: wrap; margin-bottom: 14px;
+  }
+  .time-tag {
+    font-size: 11px; font-weight: 700;
+    background: #1a1d24; color: white;
+    padding: 4px 10px; border-radius: 100px;
+    letter-spacing: 0.5px;
+    font-variant-numeric: tabular-nums;
+  }
+  .duration {
+    font-size: 11px; color: #6b7280;
+    background: #eef0f3; padding: 3px 9px;
+    border-radius: 100px; font-weight: 600;
+  }
+  h2 { font-size: 19px; font-weight: 700; line-height: 1.3; flex: 1; min-width: 200px; }
+
+  /* SECTION COLORS */
+  .before { border-left: 4px solid #c4302b; }
+  .decision { border-left: 4px solid #b8580a; }
+  .process { border-left: 4px solid #2563eb; }
+  .after { border-left: 4px solid #207533; }
+  .advice { border-left: 4px solid #db2777; }
+
+  /* QUESTIONS */
+  .question {
+    font-size: 15.5px; font-weight: 600; color: #1a1d24;
+    padding: 12px 16px; background: #f7f9fb;
+    border-radius: 10px; margin: 10px 0 8px;
+    border-left: 3px solid #2563eb;
+  }
+  .question.key {
+    background: #fff4c5; border-left-color: #f59e0b;
+  }
+  .question.key::before {
+    content: "★ КЛЮЧЕВОЙ ВОПРОС";
+    display: block; font-size: 10px;
+    letter-spacing: 1px; color: #b87502;
+    font-weight: 700; margin-bottom: 6px;
+  }
+  .question.sound {
+    background: #fdf2f8; border-left-color: #db2777;
+  }
+  .question.sound::before {
+    content: "🔊 ЦИТАТА ДЛЯ КЕЙСА";
+    display: block; font-size: 10px;
+    letter-spacing: 1px; color: #be185d;
+    font-weight: 700; margin-bottom: 6px;
+  }
+  .question.numbers {
+    background: #ecfdf5; border-left-color: #047857;
+  }
+  .question.numbers::before {
+    content: "📊 ЦИФРЫ ДЛЯ КЕЙСА";
+    display: block; font-size: 10px;
+    letter-spacing: 1px; color: #047857;
+    font-weight: 700; margin-bottom: 6px;
+  }
+  .probe {
+    color: #4d5563; font-size: 13.5px;
+    margin: 6px 0 14px 12px;
+    padding-left: 12px; border-left: 2px solid #e4e6eb;
+  }
+  .probe li { margin: 3px 0; }
+  .probe-label {
+    font-size: 11px; text-transform: uppercase;
+    color: #6b7280; font-weight: 700;
+    letter-spacing: 0.6px; margin-bottom: 4px;
+  }
+
+  /* CHECKLISTS */
+  .checklist {
+    margin: 10px 0; padding: 12px 14px;
+    background: #f7f9fb; border-radius: 8px;
+  }
+  .checklist.important { background: #fef2f2; border: 1px solid #fecaca; }
+  .checklist label {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 4px 0; cursor: pointer; font-size: 13.5px;
+  }
+  .checklist input[type=checkbox] { margin-top: 3px; cursor: pointer; }
+
+  /* NOTES */
+  .note-area { margin-top: 14px; }
+  .note-area label {
+    display: block; font-size: 11px;
+    text-transform: uppercase; color: #6b7280;
+    font-weight: 700; letter-spacing: 0.6px; margin-bottom: 4px;
+  }
+  .note-area textarea {
+    width: 100%; min-height: 80px;
+    padding: 10px 12px;
+    border: 1px solid #d6d9df; border-radius: 8px;
+    font: inherit; font-size: 13.5px;
+    line-height: 1.5; resize: vertical;
+    background: #fafbfc;
+  }
+  .note-area textarea:focus {
+    outline: 2px solid #2563eb33; background: white;
+  }
+  .note-area.cite textarea {
+    background: #fdf2f8; border-color: #fbcfe8;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 13px;
+  }
+  .note-area.numbers textarea {
+    background: #ecfdf5; border-color: #a7f3d0;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  /* SUB-HEADINGS INSIDE SECTIONS */
+  h3.sub {
+    font-size: 13px; margin: 16px 0 6px;
+    color: #6b7280; text-transform: uppercase;
+    letter-spacing: 0.6px; font-weight: 700;
+  }
+
+  /* RULES */
+  .rules {
+    background: #1a1d24; color: white;
+    border-radius: 14px; padding: 22px 26px; margin-top: 24px;
+  }
+  .rules h2 { color: white; margin-bottom: 14px; }
+  .rules ol { padding-left: 22px; }
+  .rules li { margin: 8px 0; font-size: 13.5px; color: #d6d9df; }
+  .rules strong { color: white; }
+
+  /* MATERIALS BOX */
+  .materials {
+    background: #fdf2f8;
+    border: 1px solid #fbcfe8;
+    border-radius: 14px;
+    padding: 22px 26px; margin-top: 18px;
+  }
+  .materials h2 { color: #be185d; font-size: 17px; margin-bottom: 10px; }
+  .materials li { margin: 6px 0; font-size: 13.5px; color: #4d5563; }
+
+  /* MIN BLOCK */
+  .min-block {
+    background: #fef2f2; border: 1px solid #fecaca;
+    border-radius: 12px; padding: 18px 22px; margin-top: 20px;
+  }
+  .min-block h3 {
+    color: #c4302b; font-size: 14px;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    margin-bottom: 10px;
+  }
+  .min-block ol { padding-left: 22px; }
+  .min-block li { margin: 6px 0; font-size: 14px; }
+
+  hr { border: none; border-top: 1px solid #eef0f3; margin: 14px 0; }
+
+  /* PRINT */
+  @media print {
+    body { background: white; font-size: 11pt; }
+    .top { position: static; }
+    .timer-box, .nav { display: none; }
+    .section { break-inside: avoid; }
+    textarea { display: none; }
+    .note-area::after {
+      content: "_______________________________________________";
+      display: block; color: #ccc; padding: 16px 0;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 0 12px 60px; }
+    .section { padding: 16px 18px; border-radius: 12px; }
+    h2 { font-size: 17px; }
+    .question { font-size: 14.5px; padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-inner">
+    <div class="title-row">
+      <div class="title">Кейс-интервью: Студия — переход на подписки</div>
+      <div class="subtitle">40 минут · формат под публикуемый кейс · 3 типа цели: до → как → после</div>
+    </div>
+    <div class="timer-box" id="timerBox">
+      <span id="timerVal">00:00</span>
+      <button class="timer-btn" id="btnStart">Старт</button>
+      <button class="timer-btn" id="btnReset">Сброс</button>
+    </div>
+  </div>
+  <div class="top-inner">
+    <div class="nav">
+      <a href="#setup">0:00 Установка</a>
+      <a href="#context">0:03 Студия</a>
+      <a href="#before">0:08 ДО подписки</a>
+      <a href="#decision">0:14 Решение</a>
+      <a href="#process">0:19 Как переходили</a>
+      <a href="#after">0:27 Что сейчас</a>
+      <a href="#advice">0:35 Совет</a>
+      <a href="#closing">0:38 Закрытие</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="intro">
+  <h1>Кейс-интервью со студией о переходе на подписки</h1>
+  <div class="lede">
+    <strong>Главное отличие от исследовательского интервью:</strong> ты не для себя собираешь данные — ты собираешь <em>публикуемый кейс</em>. Нужны конкретные цифры, дословные цитаты и сцены, плюс согласие на использование имени/бренда.
+  </div>
+  <div class="stem">
+    🎯 <strong>Структура кейса:</strong> <strong>ДО</strong> (классическая модель, что болело) → <strong>РЕШЕНИЕ</strong> (как пришли к подпискам) → <strong>КАК</strong> (механика перехода) → <strong>ПОСЛЕ</strong> (цифры и наблюдения) → <strong>СОВЕТ</strong> (для других студий).
+  </div>
+  <div class="case-flag">
+    🔊 <strong>3 типа золота для кейса</strong>:<br>
+    <strong>★ Ключевой</strong> — открывает суть боли/решения<br>
+    <strong>🔊 Цитата</strong> — дословная, для прямого включения в статью<br>
+    <strong>📊 Цифры</strong> — конкретные «было / стало», для графики
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<section class="section" id="setup">
+  <div class="section-head">
+    <span class="time-tag">0:00 — 0:03</span>
+    <span class="duration">3 мин</span>
+    <h2>Установка + разрешения</h2>
+  </div>
+  <div class="question">
+    «Спасибо, что согласились. Я Роман из Fitbase. Делаем кейс о вашей студии — о том, как вы перешли с классической модели на подписки. Хочу узнать, как было до, как принимали решение, как делали переход и что получилось в итоге. По времени — 40 минут. С вашего разрешения веду запись».
+  </div>
+  <div class="checklist important">
+    <strong style="display: block; margin-bottom: 6px; font-size: 12px; color: #c4302b; letter-spacing: 0.5px;">⚠️ КРИТИЧНО ПРОГОВОРИТЬ ДО ВОПРОСОВ</strong>
+    <label><input type="checkbox"> Согласие на запись (вслух)</label>
+    <label><input type="checkbox"> Согласие на использование имени студии в материале</label>
+    <label><input type="checkbox"> Согласие на использование имени собственника</label>
+    <label><input type="checkbox"> Согласие на цитирование (без согласования) или с согласованием — уточнить</label>
+    <label><input type="checkbox"> Согласие на использование фото/логотипа студии</label>
+    <label><input type="checkbox"> Уточнить — можно ли называть конкретные цифры (или дать с %)</label>
+  </div>
+  <div class="note-area">
+    <label>Заметки по разрешениям</label>
+    <textarea data-key="consent" placeholder="Что разрешили / что нет / на каких условиях..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section" id="context">
+  <div class="section-head">
+    <span class="time-tag">0:03 — 0:08</span>
+    <span class="duration">5 мин</span>
+    <h2>Студия — короткий портрет</h2>
+  </div>
+  <div class="probe-label">Базовый контекст для шапки кейса</div>
+
+  <div class="question">«Расскажите коротко про студию — какое направление, когда открылись, где находитесь?»</div>
+  <ul class="probe">
+    <li>Город / район</li>
+    <li>Направление (пилатес, йога, танцы, стрейч, mixed, …)</li>
+    <li>Сколько точек</li>
+    <li>Размер базы клиентов (активных)</li>
+    <li>Сколько тренеров (штат / аренда)</li>
+  </ul>
+
+  <div class="question">«Как вы вообще пришли к открытию студии? Какая у вас была мотивация?»</div>
+  <p class="probe">Это даёт <strong>лид</strong> для статьи — историю собственника.</p>
+
+  <div class="note-area">
+    <label>Заметки о студии</label>
+    <textarea data-key="ctx" placeholder="Город, направление, размер, история открытия..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section before" id="before">
+  <div class="section-head">
+    <span class="time-tag">0:08 — 0:14</span>
+    <span class="duration">6 мин</span>
+    <h2>🔴 ДО: классическая модель</h2>
+  </div>
+  <div class="probe-label">Цель: показать, что именно болело в старой модели</div>
+
+  <div class="question">«Как вы работали до подписок? Какая была тарифная модель?»</div>
+  <ul class="probe">
+    <li>Годовые карты, разовые, абонементы по 8/12 занятий?</li>
+    <li>Какой средний чек был? Сколько в среднем платил клиент?</li>
+    <li>Как работал ресепшен / продажи?</li>
+  </ul>
+
+  <div class="question numbers">«Какие цифры стояли в старой модели — выручка в месяц, активная база, частота визитов?»</div>
+  <p class="probe">📊 Цифры для шапки кейса «до». Если человек стесняется — давай в %.</p>
+
+  <div class="question key">«Что начало болеть именно в этой модели? Какая ситуация показала, что это уже не работает?»</div>
+  <ul class="probe">
+    <li>Сезонность (январь после декабря, лето)?</li>
+    <li>Чёрные пятницы, постоянные скидки?</li>
+    <li>Касса = аванс, реальная прибыль не видна?</li>
+    <li>Молодёжь не покупает годовые?</li>
+    <li>Перегрузка часов пик при росте активности?</li>
+  </ul>
+
+  <div class="question sound">«А был конкретный момент — что-то произошло, и вы поняли, что нужно менять модель? Какой это был день/событие?»</div>
+  <p class="probe">🔊 Если вспомнит конкретную сцену — это <strong>лид статьи</strong>. Запиши дословно.</p>
+
+  <div class="note-area cite">
+    <label>🔊 Цитаты ДО (дословно)</label>
+    <textarea data-key="cite-before" placeholder="«...»"></textarea>
+  </div>
+  <div class="note-area numbers">
+    <label>📊 Цифры ДО</label>
+    <textarea data-key="num-before" placeholder="Средний чек: ...&#10;Активных в месяц: ...&#10;Выручка/мес: ...&#10;Сезонность: ..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section decision" id="decision">
+  <div class="section-head">
+    <span class="time-tag">0:14 — 0:19</span>
+    <span class="duration">5 мин</span>
+    <h2>🟡 РЕШЕНИЕ: почему именно подписки</h2>
+  </div>
+  <div class="probe-label">Цель: показать процесс принятия решения и сомнения</div>
+
+  <div class="question">«Когда вы начали смотреть в сторону подписок — кто или что подтолкнул? Откуда узнали о модели?»</div>
+  <ul class="probe">
+    <li>Статья, конференция, конкурент, коллега из чата?</li>
+    <li>Сами наткнулись или кто-то посоветовал?</li>
+    <li>Сколько времени думали до решения?</li>
+  </ul>
+
+  <div class="question">«Какие варианты были на столе? Что ещё рассматривали кроме подписок?»</div>
+
+  <div class="question key">«Что больше всего пугало в переходе? Какие самые сильные сомнения держали?»</div>
+  <ul class="probe">
+    <li>«Кассовый разрыв» — главный страх?</li>
+    <li>«Клиенты не примут»?</li>
+    <li>«Не разберёмся технически»?</li>
+    <li>«А вдруг это не наш сегмент»?</li>
+  </ul>
+
+  <div class="question sound">«Что в итоге перевесило — что заставило сказать "ок, делаем"?»</div>
+  <p class="probe">🔊 Это <strong>кульминация первой части</strong> кейса. Очень нужна цитата.</p>
+
+  <div class="note-area cite">
+    <label>🔊 Цитаты РЕШЕНИЕ (дословно)</label>
+    <textarea data-key="cite-decision" placeholder="«...»"></textarea>
+  </div>
+  <div class="note-area">
+    <label>Заметки</label>
+    <textarea data-key="decision" placeholder="Источник идеи, сомнения, что перевесило..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section process" id="process">
+  <div class="section-head">
+    <span class="time-tag">0:19 — 0:27</span>
+    <span class="duration">8 мин</span>
+    <h2>🔵 КАК ПЕРЕХОДИЛИ: механика</h2>
+  </div>
+  <div class="probe-label">Цель: пошаговый процесс — самое читаемое в кейсе</div>
+
+  <h3 class="sub">Подготовка</h3>
+  <div class="question">«Расскажите по шагам — что вы сделали в первую очередь?»</div>
+  <ul class="probe">
+    <li>Сначала технологически (CRM, оплаты) или сначала коммерческая часть (тарифы)?</li>
+    <li>Кто-то помогал — эксперт, менеджер Fitbase?</li>
+    <li>Сколько времени заняла подготовка до старта?</li>
+  </ul>
+
+  <h3 class="sub">Тарифная сетка</h3>
+  <div class="question numbers">«Какую тарифную сетку сделали? Сколько уровней, какие цены?»</div>
+  <ul class="probe">
+    <li>Сколько уровней (базовый / расширенный / премиум)?</li>
+    <li>Как назывались тарифы?</li>
+    <li>Welcome-бонусы — что включили на первый месяц?</li>
+    <li>Гибрид с годовыми оставили или нет?</li>
+  </ul>
+
+  <h3 class="sub">Коммуникация с клиентами</h3>
+  <div class="question key">«Как объясняли клиентам, что вы переходите на подписку? Что говорили действующим с годовыми?»</div>
+  <ul class="probe">
+    <li>Какой был скрипт?</li>
+    <li>Что делали с теми, кто доплатил годовую?</li>
+    <li>Как реагировали клиенты — приняли, спорили, ушли?</li>
+  </ul>
+
+  <div class="question sound">«Помните первого клиента, который купил подписку? Какая была реакция?»</div>
+  <p class="probe">🔊 Конкретная сцена — золото для кейса.</p>
+
+  <h3 class="sub">Кассовый разрыв — что было по факту</h3>
+  <div class="question numbers">«Был ли кассовый разрыв в первые месяцы? Насколько просела касса?»</div>
+  <ul class="probe">
+    <li>На сколько % просела в худший месяц?</li>
+    <li>Через сколько месяцев вернулась к доперехода?</li>
+    <li>Как пережили — резервы, кредит, или прошло мягче, чем боялись?</li>
+  </ul>
+
+  <div class="question sound">«Что было самым сложным в первые 3 месяца перехода?»</div>
+
+  <div class="note-area cite">
+    <label>🔊 Цитаты ПРОЦЕСС (дословно)</label>
+    <textarea data-key="cite-process" placeholder="«...»"></textarea>
+  </div>
+  <div class="note-area numbers">
+    <label>📊 Цифры ПРОЦЕСС</label>
+    <textarea data-key="num-process" placeholder="Тарифная сетка: ...&#10;Welcome-бонусы: ...&#10;Просадка кассы: ...% за ... мес&#10;Время до возврата: ... мес"></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section after" id="after">
+  <div class="section-head">
+    <span class="time-tag">0:27 — 0:35</span>
+    <span class="duration">8 мин</span>
+    <h2>🟢 ПОСЛЕ: что изменилось</h2>
+  </div>
+  <div class="probe-label">Цель: измеримые результаты — то, ради чего пишется кейс</div>
+
+  <h3 class="sub">Цифры «было / стало»</h3>
+  <div class="question numbers">«Какие сейчас ключевые цифры — спустя сколько месяцев после перехода?»</div>
+  <ul class="probe">
+    <li>Выручка в месяц — на сколько % изменилась?</li>
+    <li>Активная база — выросла, осталась, изменился ли состав?</li>
+    <li>Средний чек / ARPU?</li>
+    <li>Retention клиентов (продление подписки)?</li>
+    <li>Конверсия пробного → постоянный?</li>
+  </ul>
+
+  <div class="question key">«А что изменилось в сезонности? Январь после декабря — теперь как?»</div>
+
+  <h3 class="sub">Изменения в клиентах</h3>
+  <div class="question">«Какой клиент к вам приходит сейчас по сравнению с тем, что было?»</div>
+  <ul class="probe">
+    <li>Возраст изменился?</li>
+    <li>Частота визитов?</li>
+    <li>Молодёжь появилась?</li>
+    <li>Семейные / детские форматы?</li>
+  </ul>
+
+  <h3 class="sub">Изменения в операционке</h3>
+  <div class="question">«Что изменилось в вашем рабочем дне как у собственника?»</div>
+  <ul class="probe">
+    <li>Что больше не делаете руками?</li>
+    <li>Какие отчёты теперь видите, которых не было?</li>
+    <li>Сколько времени экономите в неделю?</li>
+    <li>Что теперь делает админ, чего раньше не делал?</li>
+  </ul>
+
+  <div class="question sound">«Был ли момент, когда вы поняли — да, это получилось? Какое было ощущение?»</div>
+  <p class="probe">🔊 Эмоциональная кульминация — для финала кейса.</p>
+
+  <div class="note-area cite">
+    <label>🔊 Цитаты ПОСЛЕ (дословно)</label>
+    <textarea data-key="cite-after" placeholder="«...»"></textarea>
+  </div>
+  <div class="note-area numbers">
+    <label>📊 Цифры ПОСЛЕ (главное для визуализации)</label>
+    <textarea data-key="num-after" placeholder="Выручка: было ... → стало ...&#10;База: ...&#10;ARPU: ...&#10;Retention: ...&#10;Сезонность: ..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section advice" id="advice">
+  <div class="section-head">
+    <span class="time-tag">0:35 — 0:38</span>
+    <span class="duration">3 мин</span>
+    <h2>💡 СОВЕТ другим студиям</h2>
+  </div>
+  <div class="probe-label">Цель: универсальная полезность — за чем читают кейсы</div>
+
+  <div class="question sound">«Если бы вы могли вернуться в день, когда только думали о переходе — что бы себе сказали?»</div>
+
+  <div class="question sound">«Какие 3 главные ошибки могла бы избежать студия, которая сейчас на старте перехода?»</div>
+
+  <div class="question key">«Кому подписочная модель НЕ подходит? Есть студии, которым лучше остаться на классике?»</div>
+  <p class="probe">Полезно для честности кейса — показать, что подписка не серебряная пуля.</p>
+
+  <div class="question">«Что бы вы добавили в сам Fitbase, чтобы переход был ещё легче?»</div>
+  <p class="probe">Для нас — материал в roadmap.</p>
+
+  <div class="note-area cite">
+    <label>🔊 Цитаты СОВЕТ (дословно, для финала кейса)</label>
+    <textarea data-key="cite-advice" placeholder="«...»"></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section" id="closing">
+  <div class="section-head">
+    <span class="time-tag">0:38 — 0:40</span>
+    <span class="duration">2 мин</span>
+    <h2>Закрытие + материалы</h2>
+  </div>
+  <div class="question">«Что-то важное упустил, о чём хотите добавить?»</div>
+  <div class="question">«Какие материалы вы могли бы прислать для кейса?»</div>
+  <ul class="probe">
+    <li>Фото студии (интерьер, занятие)</li>
+    <li>Логотип в высоком разрешении</li>
+    <li>Скриншоты дашборда Fitbase (с разрешением)</li>
+    <li>Скриншот тарифной сетки на сайте студии</li>
+  </ul>
+  <div class="question">«Спасибо большое! Кейс пришлю на согласование до публикации».</div>
+
+  <div class="checklist important">
+    <strong style="display: block; margin-bottom: 6px; font-size: 12px; color: #c4302b; letter-spacing: 0.5px;">⚠️ ПОДТВЕРДИТЬ ПЕРЕД ПРОЩАНИЕМ</strong>
+    <label><input type="checkbox"> Финал — согласие на публикацию подтверждено</label>
+    <label><input type="checkbox"> Контакт для пересылки материалов</label>
+    <label><input type="checkbox"> Договорились о превью перед публикацией</label>
+    <label><input type="checkbox"> Запись сохранена локально</label>
+    <label><input type="checkbox"> Дата интервью записана</label>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<div class="rules">
+  <h2>🎯 Правила кейс-интервью</h2>
+  <ol>
+    <li><strong>Цифры ВСЕГДА просите.</strong> Можно дать в процентах, если стесняются абсолютных значений. Кейс без цифр — не кейс.</li>
+    <li><strong>Дословно цитируй.</strong> Помечай в заметках кавычками. «Я в декабре заработала больше, чем за весь январь и февраль» — золото.</li>
+    <li><strong>Сцены и конкретные моменты.</strong> «Помню, в марте 2024 пришла знакомая клиентка и спросила...» — это лид статьи.</li>
+    <li><strong>Не давай готовых ответов.</strong> Не «вам было страшно из-за кассы?» — а «что вас пугало?»</li>
+    <li><strong>Эмоции не пугают читателя.</strong> «Я в первый месяц вообще не спала» — это включает в историю.</li>
+    <li><strong>Слушай не только «да», но и «и...».</strong> После «да» делай паузу — часто дополняют.</li>
+    <li><strong>Кейс-герой — собственник, не Fitbase.</strong> Мы помогаем — герой делает.</li>
+    <li><strong>Финал — про совет другим.</strong> Это самая ценная часть для читателя.</li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<div class="materials">
+  <h2>📦 Что попросить прислать после интервью</h2>
+  <ul>
+    <li>Фото студии (минимум 3) — снаружи, интерьер, занятие. JPG в высоком разрешении.</li>
+    <li>Фото собственника (face) — для атрибуции цитат.</li>
+    <li>Логотип в PNG/SVG.</li>
+    <li>Скриншоты дашборда Fitbase с фактическими цифрами (с разрешения).</li>
+    <li>Скриншот тарифной сетки на сайте.</li>
+    <li>Если есть — пост в соцсетях о переходе или анонс для клиентов.</li>
+    <li>Контакт для согласования финальной версии кейса.</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<div class="min-block">
+  <h3>Если идёт «не туда» — минимум на 20 минут</h3>
+  <ol>
+    <li><strong>Когда поняли, что классика не работает?</strong> (3 мин) — момент срыва</li>
+    <li><strong>Кто/что подтолкнул к подпискам?</strong> (2 мин) — источник</li>
+    <li><strong>Какую тарифную сетку сделали?</strong> (3 мин) — цифры</li>
+    <li><strong>Как объясняли клиентам?</strong> (3 мин) — сцена</li>
+    <li><strong>Что было с кассой в первые месяцы?</strong> (3 мин) — цифры</li>
+    <li><strong>Что сейчас по выручке/базе?</strong> (3 мин) — цифры «было/стало»</li>
+    <li><strong>Что бы посоветовали другим?</strong> (3 мин) — финал</li>
+  </ol>
+  <p style="margin-top: 10px; font-size: 13px; color: #6b7280;">
+    Этих 7 ответов хватит на короткий кейс ~1500 слов.
+  </p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section">
+  <h2 style="margin-bottom: 14px;">📝 Структура готового кейса (что будешь писать)</h2>
+  <ol style="padding-left: 22px; line-height: 1.8;">
+    <li><strong>Лид</strong> — конкретная сцена / цифра / цитата (1 абзац)</li>
+    <li><strong>Студия в цифрах</strong> — шапка-плашка (название, город, направление, размер)</li>
+    <li><strong>Что было до</strong> — модель, боль, цифры «до» (2–3 абзаца + цитата)</li>
+    <li><strong>Решение</strong> — что подтолкнуло, сомнения, момент решения (2 абзаца + цитата)</li>
+    <li><strong>Как переходили</strong> — пошагово: тарифы, коммуникация, кассовый разрыв (4–5 абзацев + цитаты + цифры)</li>
+    <li><strong>Что получилось</strong> — цифры «было/стало», графика (3–4 абзаца + большой блок с метриками)</li>
+    <li><strong>Совет другим</strong> — 3–5 пунктов от первого лица студии</li>
+    <li><strong>Финальная цитата</strong> — эмоциональная, на закрытии</li>
+    <li><strong>Контакт / CTA</strong> — связаться с нами для аналогичного перехода</li>
+  </ol>
+</div>
+
+<div style="text-align: center; margin-top: 24px;">
+  <button onclick="window.print()" style="background: #1a1d24; color: white; border: none; padding: 12px 24px; border-radius: 100px; font-weight: 600; cursor: pointer;">🖨 Распечатать</button>
+  <button onclick="exportNotes()" style="background: #db2777; color: white; border: none; padding: 12px 24px; border-radius: 100px; font-weight: 600; cursor: pointer; margin-left: 8px;">📋 Экспорт заметок в Markdown</button>
+  <button onclick="if(confirm('Очистить все заметки и чекбоксы?')) { localStorage.clear(); location.reload(); }" style="background: #eef0f3; color: #4d5563; border: none; padding: 12px 24px; border-radius: 100px; font-weight: 600; cursor: pointer; margin-left: 8px;">Очистить</button>
+</div>
+
+</div>
+
+<script>
+// === TIMER ===
+let secs = 0, tick = null;
+const box = document.getElementById('timerBox');
+const val = document.getElementById('timerVal');
+const btnStart = document.getElementById('btnStart');
+const btnReset = document.getElementById('btnReset');
+
+function render() {
+  const m = String(Math.floor(secs / 60)).padStart(2, '0');
+  const s = String(secs % 60).padStart(2, '0');
+  val.textContent = m + ':' + s;
+  box.classList.toggle('warn', secs >= 30*60 && secs < 38*60);
+  box.classList.toggle('crit', secs >= 38*60);
+}
+btnStart.addEventListener('click', () => {
+  if (tick) { clearInterval(tick); tick = null; btnStart.textContent = 'Старт'; }
+  else { tick = setInterval(() => { secs++; render(); }, 1000); btnStart.textContent = 'Пауза'; }
+});
+btnReset.addEventListener('click', () => {
+  clearInterval(tick); tick = null; secs = 0; render(); btnStart.textContent = 'Старт';
+});
+render();
+
+// === NOTES PERSISTENCE ===
+document.querySelectorAll('textarea[data-key]').forEach(t => {
+  const k = 'note_case_' + t.dataset.key;
+  const saved = localStorage.getItem(k);
+  if (saved) t.value = saved;
+  t.addEventListener('input', () => localStorage.setItem(k, t.value));
+});
+
+// === CHECKBOX PERSISTENCE ===
+document.querySelectorAll('input[type=checkbox]').forEach((c, i) => {
+  const k = 'chk_case_' + i;
+  c.checked = localStorage.getItem(k) === '1';
+  c.addEventListener('change', () => localStorage.setItem(k, c.checked ? '1' : '0'));
+});
+
+// === NAV PROGRESS ===
+const sections = document.querySelectorAll('.section[id]');
+const navLinks = document.querySelectorAll('.nav a');
+window.addEventListener('scroll', () => {
+  sections.forEach((sec, i) => {
+    const rect = sec.getBoundingClientRect();
+    if (rect.bottom < 200 && navLinks[i]) navLinks[i].classList.add('done');
+  });
+});
+
+// === EXPORT NOTES TO MARKDOWN ===
+function exportNotes() {
+  const labels = {
+    'consent': 'Разрешения',
+    'ctx': 'Студия — контекст',
+    'cite-before': 'Цитаты ДО',
+    'num-before': 'Цифры ДО',
+    'cite-decision': 'Цитаты РЕШЕНИЕ',
+    'decision': 'РЕШЕНИЕ — заметки',
+    'cite-process': 'Цитаты ПРОЦЕСС',
+    'num-process': 'Цифры ПРОЦЕСС',
+    'cite-after': 'Цитаты ПОСЛЕ',
+    'num-after': 'Цифры ПОСЛЕ',
+    'cite-advice': 'Цитаты СОВЕТ',
+  };
+  const now = new Date().toISOString().slice(0, 10);
+  let md = '# Кейс-интервью: студия — переход на подписки\n\n';
+  md += '*Дата: ' + now + '*\n\n---\n\n';
+  for (const [k, label] of Object.entries(labels)) {
+    const val = localStorage.getItem('note_case_' + k) || '';
+    if (val.trim()) {
+      md += '## ' + label + '\n\n' + val + '\n\n';
+    }
+  }
+  const blob = new Blob([md], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'case_studio_subscription_' + now + '.md';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>

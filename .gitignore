@@ -1,0 +1,9 @@
+.DS_Store
+*.swp
+*~
+*.local
+
+# Локальные заметки и черновики
+notes/
+drafts/
+*.draft.md

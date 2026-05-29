@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Switch-интервью: Левита → Listok+АМО → Fitbase</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+    color: #1a1d24;
+    background: #f5f6f8;
+    line-height: 1.55;
+    font-size: 15px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* HEADER + STICKY TIMER */
+  .top {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #e4e6eb;
+    padding: 14px 24px;
+    margin-bottom: 24px;
+  }
+  .top-inner { max-width: 980px; margin: 0 auto; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .title-row { flex: 1; min-width: 260px; }
+  .title { font-size: 15px; font-weight: 700; line-height: 1.3; }
+  .subtitle { font-size: 12px; color: #6b7280; margin-top: 2px; }
+
+  .timer-box {
+    display: flex; align-items: center; gap: 8px;
+    background: #1a1d24;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  .timer-box.warn { background: #b8580a; }
+  .timer-box.crit { background: #c4302b; }
+  .timer-btn {
+    background: rgba(255,255,255,0.18);
+    border: none; color: white;
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 11px; font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+  }
+  .timer-btn:hover { background: rgba(255,255,255,0.28); }
+
+  .nav {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .nav a {
+    text-decoration: none;
+    font-size: 11px;
+    color: #6b7280;
+    background: #eef0f3;
+    padding: 4px 10px;
+    border-radius: 100px;
+    transition: all 0.15s;
+    font-weight: 500;
+  }
+  .nav a:hover { background: #e0e3e8; color: #1a1d24; }
+  .nav a.done { background: #d4f4dd; color: #207533; }
+
+  /* INTRO */
+  .intro {
+    background: white;
+    border-radius: 16px;
+    padding: 22px 26px;
+    margin-bottom: 20px;
+    border: 1px solid #e4e6eb;
+  }
+  .intro h1 { font-size: 22px; line-height: 1.25; font-weight: 700; margin-bottom: 8px; }
+  .intro .lede {
+    color: #4d5563;
+    font-size: 14px;
+    padding: 12px 14px;
+    background: #fff8e6;
+    border-left: 3px solid #f0a500;
+    border-radius: 6px;
+    margin-top: 14px;
+  }
+  .intro .stem {
+    background: #ecf3ff;
+    border-left: 3px solid #2563eb;
+    padding: 12px 14px;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  /* SECTIONS */
+  .section {
+    background: white;
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin-bottom: 16px;
+    border: 1px solid #e4e6eb;
+  }
+  .section.dark { background: #1a1d24; color: white; border-color: #2c2f37; }
+  .section.dark .question { color: white; }
+  .section.dark .probe { color: #b8bcc6; }
+  .section.dark h2 { color: white; }
+  .section.dark .time-tag { background: rgba(255,255,255,0.12); color: white; }
+  .section.dark .note { color: #8b919c; }
+  .section.dark .star { color: #fbbf24; }
+
+  .section-head {
+    display: flex; align-items: center; gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .time-tag {
+    font-size: 11px; font-weight: 700;
+    background: #1a1d24;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.5px;
+    font-variant-numeric: tabular-nums;
+  }
+  .duration {
+    font-size: 11px; color: #6b7280;
+    background: #eef0f3;
+    padding: 3px 9px;
+    border-radius: 100px;
+    font-weight: 600;
+  }
+  h2 {
+    font-size: 19px; font-weight: 700; line-height: 1.3;
+    flex: 1; min-width: 200px;
+  }
+
+  /* PHASE COLORS */
+  .levita { border-left: 4px solid #c4302b; }
+  .listok { border-left: 4px solid #b8580a; }
+  .fitbase { border-left: 4px solid #207533; }
+
+  /* QUESTIONS */
+  .question {
+    font-size: 15.5px;
+    font-weight: 600;
+    color: #1a1d24;
+    padding: 12px 16px;
+    background: #f7f9fb;
+    border-radius: 10px;
+    margin: 10px 0 8px;
+    border-left: 3px solid #2563eb;
+  }
+  .question.key {
+    background: #fff4c5;
+    border-left-color: #f59e0b;
+  }
+  .question.key::before {
+    content: "★ КЛЮЧЕВОЙ ВОПРОС";
+    display: block;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #b87502;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .probe {
+    color: #4d5563;
+    font-size: 13.5px;
+    margin: 6px 0 14px 12px;
+    padding-left: 12px;
+    border-left: 2px solid #e4e6eb;
+  }
+  .probe li { margin: 3px 0; }
+  .probe-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #6b7280;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    margin-bottom: 4px;
+  }
+
+  /* CHECKLISTS */
+  .checklist {
+    margin: 10px 0;
+    padding: 12px 14px;
+    background: #f7f9fb;
+    border-radius: 8px;
+  }
+  .checklist label {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 4px 0;
+    cursor: pointer;
+    font-size: 13.5px;
+  }
+  .checklist input[type=checkbox] { margin-top: 3px; cursor: pointer; }
+
+  /* NOTES */
+  .note-area {
+    margin-top: 14px;
+  }
+  .note-area label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #6b7280;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    margin-bottom: 4px;
+  }
+  .note-area textarea {
+    width: 100%;
+    min-height: 60px;
+    padding: 10px 12px;
+    border: 1px solid #d6d9df;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 13.5px;
+    line-height: 1.5;
+    resize: vertical;
+    background: #fafbfc;
+  }
+  .note-area textarea:focus {
+    outline: 2px solid #2563eb33;
+    background: white;
+  }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 8px 0; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #eef0f3; }
+  th { font-weight: 600; color: #6b7280; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; }
+
+  /* RULES (END) */
+  .rules {
+    background: #1a1d24;
+    color: white;
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin-top: 24px;
+  }
+  .rules h2 { color: white; margin-bottom: 14px; }
+  .rules ol { padding-left: 22px; }
+  .rules li {
+    margin: 8px 0;
+    font-size: 13.5px;
+    color: #d6d9df;
+  }
+  .rules strong { color: white; }
+
+  /* SKELETON BOX */
+  .skel {
+    background: #f0fdf4;
+    border: 1px dashed #207533;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 14px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: #103e1a;
+    white-space: pre-wrap;
+  }
+
+  .star { color: #f59e0b; font-weight: 700; }
+  hr { border: none; border-top: 1px solid #eef0f3; margin: 14px 0; }
+
+  /* MIN VERSION */
+  .min-block {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-top: 20px;
+  }
+  .min-block h3 {
+    color: #c4302b;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 10px;
+  }
+  .min-block ol { padding-left: 22px; }
+  .min-block li { margin: 6px 0; font-size: 14px; }
+  .min-block li strong { color: #1a1d24; }
+
+  /* PRINT */
+  @media print {
+    body { background: white; font-size: 11pt; }
+    .top { position: static; box-shadow: none; }
+    .timer-box, .nav { display: none; }
+    .section { break-inside: avoid; box-shadow: none; }
+    textarea { display: none; }
+    .note-area::after {
+      content: "_______________________________________________";
+      display: block;
+      color: #ccc;
+      padding: 16px 0;
+    }
+  }
+
+  /* MOBILE */
+  @media (max-width: 600px) {
+    .wrap { padding: 0 12px 60px; }
+    .section { padding: 16px 18px; border-radius: 12px; }
+    h2 { font-size: 17px; }
+    .question { font-size: 14.5px; padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-inner">
+    <div class="title-row">
+      <div class="title">Switch-интервью: Левита → Listok+АМО → Fitbase</div>
+      <div class="subtitle">40 минут · по AJTBD Замесина · фокус на работах ЛПР</div>
+    </div>
+    <div class="timer-box" id="timerBox">
+      <span id="timerVal">00:00</span>
+      <button class="timer-btn" id="btnStart">Старт</button>
+      <button class="timer-btn" id="btnReset">Сброс</button>
+    </div>
+  </div>
+  <div class="top-inner">
+    <div class="nav">
+      <a href="#setup">0:00 Установка</a>
+      <a href="#context">0:03 Контекст</a>
+      <a href="#levita">0:08 Левита</a>
+      <a href="#listok">0:14 Listok+АМО</a>
+      <a href="#trigger-fb">0:22 Триггер Fitbase</a>
+      <a href="#fitbase">0:27 Fitbase</a>
+      <a href="#gap">0:35 Что не закрыто</a>
+      <a href="#closing">0:38 Закрытие</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="intro">
+  <h1>Switch-интервью: Экс-франчайзи Левиты на Fitbase</h1>
+  <div class="lede">
+    <strong>Стержень:</strong> какие работы ЛПР <em>не выполнялись раньше</em>, как они выполняются <em>сейчас</em>, и какие ещё <em>не выполнены</em>. Идём по трём состояниям как по фильму.
+  </div>
+  <div class="stem">
+    🎯 <strong>Главный принцип:</strong> не «что нравится в Fitbase» — это feedback, а не switch.<br>
+    Правильно: «<strong>что вы не могли делать тогда, что можете делать сейчас, чего по-прежнему не можете</strong>».
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<section class="section" id="setup">
+  <div class="section-head">
+    <span class="time-tag">0:00 — 0:03</span>
+    <span class="duration">3 мин</span>
+    <h2>Установка</h2>
+  </div>
+  <div class="question">
+    «Спасибо, что согласились. Я Роман из Fitbase. Не продажа — собираю историю вашего перехода: как было при Левите, как было с Listok и АМО, как сейчас. Меня интересует, <strong>что вы лично могли и не могли делать</strong> на каждом этапе. 40 минут максимум. С вашего разрешения веду запись».
+  </div>
+  <div class="checklist">
+    <label><input type="checkbox"> Согласие на запись получено (вслух)</label>
+    <label><input type="checkbox"> Имя, роль</label>
+    <label><input type="checkbox"> Размер бизнеса (точки / клиенты / тренеры)</label>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section" id="context">
+  <div class="section-head">
+    <span class="time-tag">0:03 — 0:08</span>
+    <span class="duration">5 мин</span>
+    <h2>Контекст бизнеса</h2>
+  </div>
+  <div class="probe-label">Базовый портрет — кратко</div>
+  <ul class="probe">
+    <li>Сколько точек, какое направление, размер базы клиентов</li>
+    <li>Ваша роль — собственник / директор / оба</li>
+    <li>Сколько лет в фитнесе. Что было до Левиты</li>
+    <li>Когда зашли во франшизу, когда вышли</li>
+  </ul>
+  <div class="note-area">
+    <label>Заметки</label>
+    <textarea data-key="ctx" placeholder="Профиль, размер, опыт, временные рамки..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section levita" id="levita">
+  <div class="section-head">
+    <span class="time-tag">0:08 — 0:14</span>
+    <span class="duration">6 мин</span>
+    <h2>🔴 Этап 1: Жизнь при Левите</h2>
+  </div>
+  <div class="probe-label">Цель: понять, что вы как ЛПР хотели делать, но не могли</div>
+
+  <div class="question">«Расскажите про обычный день при Левите — что входило в вашу работу как собственника?»</div>
+
+  <div class="question">«А что вы хотели делать, но <strong>не могли</strong> из-за того, что вы во франшизе?»</div>
+  <div class="probe-label">Прокапывай:</div>
+  <ul class="probe">
+    <li>Какие решения были не вашими?</li>
+    <li>Какие данные вы хотели видеть, но не видели?</li>
+    <li>Что вы хотели менять, но не могли?</li>
+    <li>На что лично уходили ваши силы тогда?</li>
+  </ul>
+
+  <div class="question key">«Если бы у вас тогда был магический инструмент, что бы вы хотели начать делать лично?»</div>
+  <p class="probe">⭐ Это даёт картину <strong>нерешённых работ ЛПР до switch</strong>. Запиши дословно.</p>
+
+  <hr>
+
+  <div class="question">«В какой момент вы поняли — "так больше нельзя, надо выходить"?»</div>
+  <p class="probe">Это главный <strong>Push-триггер</strong>. Конкретное событие, не размытое «накопилось».</p>
+
+  <div class="note-area">
+    <label>Заметки: что не мог делать ЛПР при Левите</label>
+    <textarea data-key="levita" placeholder="Работы, которые не выполнялись... момент срыва... цитаты..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section listok" id="listok">
+  <div class="section-head">
+    <span class="time-tag">0:14 — 0:22</span>
+    <span class="duration">8 мин</span>
+    <h2>🟡 Этап 2: Жизнь на Listok + АМО</h2>
+  </div>
+  <div class="probe-label">Цель: какие работы стали выполняться, какие остались закрытыми</div>
+
+  <h3 style="font-size: 14px; margin: 14px 0 6px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.6px;">Контекст перехода (2 мин)</h3>
+
+  <div class="question">«Когда вышли — Listok остался с вами или франшиза отключила?»</div>
+  <ul class="probe">
+    <li>Если <strong>отключили</strong>: «Вам пришлось искать новое решение быстро. На что обратили внимание сначала?»</li>
+    <li>Если <strong>остались</strong>: «Почему остались на Listok после выхода — сознательный выбор или миграция дорогая?»</li>
+  </ul>
+  <div class="question">«АМО зачем взяли отдельно — что Listok не закрывал?»</div>
+
+  <h3 style="font-size: 14px; margin: 14px 0 6px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.6px;">Какие работы теперь делались (3 мин)</h3>
+
+  <div class="question">«Что вы стали делать после выхода, что раньше делать не могли?»</div>
+  <ul class="probe">
+    <li>Какие решения теперь принимали сами?</li>
+    <li>Какие данные стали видеть?</li>
+    <li>Что изменилось в вашей работе как фаундера лично?</li>
+  </ul>
+
+  <h3 style="font-size: 14px; margin: 14px 0 6px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.6px;">Какие работы всё ещё не выполнялись (3 мин)</h3>
+
+  <div class="question">«А что вы хотели делать, но Listok + АМО не давали? Что приходилось делать руками или вообще не делать?»</div>
+  <ul class="probe">
+    <li>Что мешало именно в этой задаче?</li>
+    <li>Какие были обходные пути?</li>
+    <li>Цифры расходились между Listok и АМО? Дубли клиентов?</li>
+  </ul>
+  <p class="probe">⭐ Здесь обычно находятся <strong>2–3 ключевые незакрытые работы</strong>, которые и стали триггером для второго switch.</p>
+
+  <div class="note-area">
+    <label>Заметки: что закрылось, что осталось открытым</label>
+    <textarea data-key="listok" placeholder="Что стало возможным... что всё ещё не получалось... обходные пути..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section" id="trigger-fb" style="border-left: 4px solid #2563eb;">
+  <div class="section-head">
+    <span class="time-tag">0:22 — 0:27</span>
+    <span class="duration">5 мин</span>
+    <h2>🔵 Триггер перехода на Fitbase</h2>
+  </div>
+
+  <div class="question">«В какой момент вы поняли — Listok + АМО больше не справляются? Что произошло?»</div>
+  <ul class="probe">
+    <li>Конкретное событие, не «накопилось»</li>
+    <li>Кто посоветовал Fitbase / откуда узнали?</li>
+    <li>Кого ещё рассматривали? Почему именно Fitbase?</li>
+    <li>Что ожидали получить? <strong>Какие 3 работы должны были закрыться этим переходом?</strong></li>
+  </ul>
+
+  <div class="question key">«Что должно было измениться в вашей работе после перехода?»</div>
+  <p class="probe">Это <strong>бенчмарк</strong> — против которого сравним факт в следующем блоке.</p>
+
+  <div class="note-area">
+    <label>Заметки: 3 ожидаемые работы (бенчмарк для проверки)</label>
+    <textarea data-key="trigger" placeholder="1. ...&#10;2. ...&#10;3. ..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section fitbase" id="fitbase">
+  <div class="section-head">
+    <span class="time-tag">0:27 — 0:35</span>
+    <span class="duration">8 мин</span>
+    <h2>🟢 Этап 3: Жизнь на Fitbase</h2>
+  </div>
+  <div class="probe-label">Цель: какие из ожидаемых работ реально выполняются, а какие нет</div>
+
+  <h3 style="font-size: 14px; margin: 14px 0 6px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.6px;">Работы, которые ожидались закрыться (3 мин)</h3>
+
+  <div class="question">«Вы сказали, что ожидали [работа Х]. Сейчас она выполняется?»</div>
+  <p class="probe">Для каждой из 3 работ:</p>
+  <ul class="probe">
+    <li>Выполняется / не выполняется / частично</li>
+    <li>Как именно — расскажите шаг сценария</li>
+    <li>Удовлетворённость <strong>1–10</strong>. Чего не хватает до 10?</li>
+  </ul>
+
+  <h3 style="font-size: 14px; margin: 14px 0 6px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.6px;">Что добавилось сверх ожиданий (2 мин)</h3>
+
+  <div class="question">«А есть что-то, что вы <strong>не ожидали</strong>, но появилось — и оно зашло?»</div>
+  <p class="probe">Это золото для маркетинга — те функции, которые продают сами, без позиционирования.</p>
+
+  <h3 style="font-size: 14px; margin: 14px 0 6px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.6px;">Что лично теперь делаете, чего не делали никогда (3 мин)</h3>
+
+  <div class="question key">«Если посмотреть на вас как на ЛПР — что вы теперь делаете в студии, чего не делали при Левите и на Listok?»</div>
+  <ul class="probe">
+    <li>Какие решения теперь принимаете на основе данных?</li>
+    <li>На что уходит ваше время сейчас vs раньше?</li>
+    <li>Стали ли вы свободнее? В чём?</li>
+  </ul>
+  <p class="probe">⭐ Это <strong>ROI личной работы ЛПР</strong>. Самый сильный маркетинговый материал.</p>
+
+  <div class="note-area">
+    <label>Заметки: факт по 3 ожидаемым + сверх ожиданий + личная работа</label>
+    <textarea data-key="fitbase" placeholder="Работа 1: выполняется / нет — оценка...&#10;Работа 2: ...&#10;Работа 3: ...&#10;&#10;Сверх ожиданий: ...&#10;&#10;Личная работа: ..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section" id="gap" style="border-left: 4px solid #f59e0b;">
+  <div class="section-head">
+    <span class="time-tag">0:35 — 0:38</span>
+    <span class="duration">3 мин</span>
+    <h2>⚠️ Что ещё не закрыто</h2>
+  </div>
+
+  <div class="question">«Какие работы как ЛПР вы хотели бы выполнять, но Fitbase пока не даёт?»</div>
+  <ul class="probe">
+    <li>Что вы делаете в Excel / на стороне / руками?</li>
+    <li>Какие данные хотели бы видеть, но не видите?</li>
+    <li>Если бы у нас был roadmap — что бы вы туда положили в первую очередь?</li>
+  </ul>
+  <p class="probe">⭐ Это <strong>gap для продукта и roadmap-материал</strong>.</p>
+
+  <div class="note-area">
+    <label>Заметки: незакрытые работы + roadmap-приоритеты</label>
+    <textarea data-key="gap" placeholder="Что делается в Excel...&#10;Что хотели бы видеть...&#10;Топ-3 в roadmap..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section" id="closing">
+  <div class="section-head">
+    <span class="time-tag">0:38 — 0:40</span>
+    <span class="duration">2 мин</span>
+    <h2>Закрытие</h2>
+  </div>
+  <div class="question">«Что-то важное упустил, о чём хотите добавить?»</div>
+  <div class="question">«Спасибо большое. Если будут уточнения — можно написать в Телеграм?»</div>
+  <div class="checklist">
+    <label><input type="checkbox"> Контакт подтверждён</label>
+    <label><input type="checkbox"> Запись сохранена</label>
+    <label><input type="checkbox"> Договорились о возможном повторе</label>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<div class="rules">
+  <h2>🎯 Правила Switch-интервью</h2>
+  <ol>
+    <li><strong>Конкретное событие, не «накопилось».</strong> Если слышишь «было неудобно» — копай: «А когда стало совсем неудобно? Какой день?»</li>
+    <li><strong>Сравнение времён обязательно.</strong> «А как это было при Левите?» / «А на Listok?» / «А сейчас?» — даёт реальный switch.</li>
+    <li><strong>Личная работа ЛПР &gt; бизнес-метрики.</strong> Кейс «не могу уйти в отпуск» сильнее любых процентов.</li>
+    <li><strong>Не «что нравится / не нравится» — а «что вы делаете / не делаете».</strong> Behavior, не opinion.</li>
+    <li><strong>Цитаты дословно.</strong> «При Левите я даже цены сама не могла поменять» — золото.</li>
+    <li><strong>Молчание 7 секунд.</strong> Дополнят сами, особенно про личное.</li>
+    <li><strong>Прокапывай «почему» до 3 раз.</strong> Поверхностный ответ редко настоящий.</li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<div class="section">
+  <h2 style="margin-bottom: 14px;">📋 Скелет рассказа (держи перед глазами)</h2>
+  <div class="skel">ПРИ ЛЕВИТЕ
+├─ Что МОГ делать (бизнес-задачи)
+├─ Что НЕ МОГ делать (личная мечта ЛПР)
+└─ Last straw → Push
+
+НА LISTOK + АМО
+├─ Что СТАЛ делать (плюс)
+├─ Что ВСЁ ЕЩЁ не делал (gap)
+└─ Last straw → Push
+
+НА FITBASE
+├─ Ожидания → 3 работы
+├─ Факт по каждой ожидаемой работе
+├─ Что сверх ожиданий (delight)
+└─ Что ещё не закрыто (roadmap)</div>
+</div>
+
+<!-- ============================================================ -->
+<div class="min-block">
+  <h3>Если идёт «не туда» — минимум на 20 минут</h3>
+  <ol>
+    <li><strong>Что при Левите не могли как ЛПР?</strong> (3 мин)</li>
+    <li><strong>Что стало возможным на Listok+АМО?</strong> (3 мин)</li>
+    <li><strong>Что Listok+АМО не закрывали?</strong> (3 мин)</li>
+    <li><strong>Момент перехода — когда поняли что Fitbase?</strong> (2 мин)</li>
+    <li><strong>Что должно было закрыться → закрылось?</strong> (5 мин)</li>
+    <li><strong>Что добавилось сверх ожиданий?</strong> (2 мин)</li>
+    <li><strong>Чего ещё не хватает?</strong> (2 мин)</li>
+  </ol>
+  <p style="margin-top: 10px; font-size: 13px; color: #6b7280;">
+    Эти 7 вопросов = полная Switch-картина. Минимум, который даст канонический разбор.
+  </p>
+</div>
+
+<div style="text-align: center; margin-top: 24px;">
+  <button onclick="window.print()" style="background: #1a1d24; color: white; border: none; padding: 12px 24px; border-radius: 100px; font-weight: 600; cursor: pointer;">🖨 Распечатать (на случай отказа техники)</button>
+  <button onclick="if(confirm('Очистить все заметки и чекбоксы?')) { localStorage.clear(); location.reload(); }" style="background: #eef0f3; color: #4d5563; border: none; padding: 12px 24px; border-radius: 100px; font-weight: 600; cursor: pointer; margin-left: 8px;">Очистить заметки</button>
+</div>
+
+</div>
+
+<script>
+// === SIMPLE TIMER ===
+let secs = 0, tick = null;
+const box = document.getElementById('timerBox');
+const val = document.getElementById('timerVal');
+const btnStart = document.getElementById('btnStart');
+const btnReset = document.getElementById('btnReset');
+
+function render() {
+  const m = String(Math.floor(secs / 60)).padStart(2, '0');
+  const s = String(secs % 60).padStart(2, '0');
+  val.textContent = m + ':' + s;
+  box.classList.toggle('warn', secs >= 30*60 && secs < 38*60);
+  box.classList.toggle('crit', secs >= 38*60);
+}
+
+btnStart.addEventListener('click', () => {
+  if (tick) {
+    clearInterval(tick); tick = null;
+    btnStart.textContent = 'Старт';
+  } else {
+    tick = setInterval(() => { secs++; render(); }, 1000);
+    btnStart.textContent = 'Пауза';
+  }
+});
+
+btnReset.addEventListener('click', () => {
+  clearInterval(tick); tick = null;
+  secs = 0; render();
+  btnStart.textContent = 'Старт';
+});
+
+render();
+
+// === NOTES PERSISTENCE ===
+document.querySelectorAll('textarea[data-key]').forEach(t => {
+  const k = 'note_' + t.dataset.key;
+  const saved = localStorage.getItem(k);
+  if (saved) t.value = saved;
+  t.addEventListener('input', () => localStorage.setItem(k, t.value));
+});
+
+// === CHECKBOX PERSISTENCE ===
+document.querySelectorAll('input[type=checkbox]').forEach((c, i) => {
+  const k = 'chk_' + i;
+  c.checked = localStorage.getItem(k) === '1';
+  c.addEventListener('change', () => localStorage.setItem(k, c.checked ? '1' : '0'));
+});
+
+// === MARK NAV AS VISITED WHEN SECTION SCROLLED PAST ===
+const sections = document.querySelectorAll('.section[id]');
+const navLinks = document.querySelectorAll('.nav a');
+window.addEventListener('scroll', () => {
+  sections.forEach((sec, i) => {
+    const rect = sec.getBoundingClientRect();
+    if (rect.bottom < 200 && navLinks[i]) navLinks[i].classList.add('done');
+  });
+});
+</script>
+
+</body>
+</html>

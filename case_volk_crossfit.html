@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кейс-интервью: VOLK CrossFit — переход на подписки</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+    color: #1a1d24; background: #f5f6f8;
+    line-height: 1.55; font-size: 15px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* TOP / TIMER */
+  .top {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #e4e6eb;
+    padding: 14px 24px; margin-bottom: 24px;
+  }
+  .top-inner { max-width: 980px; margin: 0 auto; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .title-row { flex: 1; min-width: 260px; }
+  .title { font-size: 15px; font-weight: 700; line-height: 1.3; }
+  .subtitle { font-size: 12px; color: #6b7280; margin-top: 2px; }
+  .timer-box {
+    display: flex; align-items: center; gap: 8px;
+    background: #1a1d24; color: white;
+    padding: 8px 14px; border-radius: 100px;
+    font-weight: 600; font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  .timer-box.warn { background: #b8580a; }
+  .timer-box.crit { background: #c4302b; }
+  .timer-btn {
+    background: rgba(255,255,255,0.18);
+    border: none; color: white;
+    padding: 4px 10px; border-radius: 100px;
+    font-size: 11px; font-weight: 600; cursor: pointer;
+    letter-spacing: 0.3px;
+  }
+  .timer-btn:hover { background: rgba(255,255,255,0.28); }
+
+  .nav { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .nav a {
+    text-decoration: none; font-size: 11px; color: #6b7280;
+    background: #eef0f3; padding: 4px 10px; border-radius: 100px;
+    transition: all 0.15s; font-weight: 500;
+  }
+  .nav a:hover { background: #e0e3e8; color: #1a1d24; }
+  .nav a.done { background: #d4f4dd; color: #207533; }
+
+  /* INTRO */
+  .intro {
+    background: white; border-radius: 16px;
+    padding: 22px 26px; margin-bottom: 20px;
+    border: 1px solid #e4e6eb;
+  }
+  .intro h1 { font-size: 22px; line-height: 1.25; font-weight: 700; margin-bottom: 8px; }
+  .intro .lede {
+    color: #4d5563; font-size: 14px;
+    padding: 12px 14px;
+    background: #fff8e6;
+    border-left: 3px solid #f0a500;
+    border-radius: 6px; margin-top: 14px;
+  }
+  .intro .stem {
+    background: #ecf3ff;
+    border-left: 3px solid #2563eb;
+    padding: 12px 14px; border-radius: 6px;
+    margin-top: 10px; font-size: 14px;
+  }
+  .intro .case-flag {
+    background: #fdf2f8;
+    border-left: 3px solid #db2777;
+    padding: 12px 14px; border-radius: 6px;
+    margin-top: 10px; font-size: 14px;
+  }
+
+  /* VOLK PROFILE BLOCK */
+  .profile {
+    background: #1a1d24;
+    color: white;
+    border-radius: 16px;
+    padding: 22px 26px;
+    margin-bottom: 20px;
+  }
+  .profile h2 {
+    color: white; font-size: 17px;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .profile .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .profile .cell {
+    background: rgba(255,255,255,0.07);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .profile .cell-label {
+    font-size: 10px; text-transform: uppercase;
+    color: #8b919c; letter-spacing: 0.6px;
+    margin-bottom: 4px; font-weight: 600;
+  }
+  .profile .cell-val { font-size: 13.5px; color: white; }
+  .profile table.tariffs {
+    width: 100%; border-collapse: collapse;
+    margin-top: 4px;
+    font-size: 12.5px;
+  }
+  .profile table.tariffs th, .profile table.tariffs td {
+    text-align: left; padding: 6px 10px;
+    border-bottom: 1px solid #2c2f37;
+  }
+  .profile table.tariffs th {
+    color: #8b919c; font-weight: 600;
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  .profile table.tariffs td { color: #d6d9df; }
+  .profile a { color: #60a5fa; text-decoration: none; }
+
+  /* SECTIONS */
+  .section {
+    background: white; border-radius: 14px;
+    padding: 22px 26px; margin-bottom: 16px;
+    border: 1px solid #e4e6eb;
+  }
+  .section-head {
+    display: flex; align-items: center; gap: 12px;
+    flex-wrap: wrap; margin-bottom: 14px;
+  }
+  .time-tag {
+    font-size: 11px; font-weight: 700;
+    background: #1a1d24; color: white;
+    padding: 4px 10px; border-radius: 100px;
+    letter-spacing: 0.5px;
+    font-variant-numeric: tabular-nums;
+  }
+  .duration {
+    font-size: 11px; color: #6b7280;
+    background: #eef0f3; padding: 3px 9px;
+    border-radius: 100px; font-weight: 600;
+  }
+  h2 { font-size: 19px; font-weight: 700; line-height: 1.3; flex: 1; min-width: 200px; }
+
+  /* SECTION COLORS */
+  .before { border-left: 4px solid #c4302b; }
+  .decision { border-left: 4px solid #b8580a; }
+  .process { border-left: 4px solid #2563eb; }
+  .after { border-left: 4px solid #207533; }
+  .advice { border-left: 4px solid #db2777; }
+
+  /* CROSSFIT BADGES */
+  .badge-cf {
+    display: inline-block;
+    background: #1a1d24;
+    color: white;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .badge-children { background: #db2777; }
+  .badge-community { background: #f59e0b; }
+  .badge-mini { background: #2563eb; }
+  .badge-trainers { background: #047857; }
+
+  /* QUESTIONS */
+  .question {
+    font-size: 15.5px; font-weight: 600; color: #1a1d24;
+    padding: 12px 16px; background: #f7f9fb;
+    border-radius: 10px; margin: 10px 0 8px;
+    border-left: 3px solid #2563eb;
+  }
+  .question.key {
+    background: #fff4c5; border-left-color: #f59e0b;
+  }
+  .question.key::before {
+    content: "★ КЛЮЧЕВОЙ ВОПРОС";
+    display: block; font-size: 10px;
+    letter-spacing: 1px; color: #b87502;
+    font-weight: 700; margin-bottom: 6px;
+  }
+  .question.sound {
+    background: #fdf2f8; border-left-color: #db2777;
+  }
+  .question.sound::before {
+    content: "🔊 ЦИТАТА ДЛЯ КЕЙСА";
+    display: block; font-size: 10px;
+    letter-spacing: 1px; color: #be185d;
+    font-weight: 700; margin-bottom: 6px;
+  }
+  .question.numbers {
+    background: #ecfdf5; border-left-color: #047857;
+  }
+  .question.numbers::before {
+    content: "📊 ЦИФРЫ ДЛЯ КЕЙСА";
+    display: block; font-size: 10px;
+    letter-spacing: 1px; color: #047857;
+    font-weight: 700; margin-bottom: 6px;
+  }
+  .probe {
+    color: #4d5563; font-size: 13.5px;
+    margin: 6px 0 14px 12px;
+    padding-left: 12px; border-left: 2px solid #e4e6eb;
+  }
+  .probe li { margin: 3px 0; }
+  .probe-label {
+    font-size: 11px; text-transform: uppercase;
+    color: #6b7280; font-weight: 700;
+    letter-spacing: 0.6px; margin-bottom: 4px;
+  }
+
+  /* CHECKLISTS */
+  .checklist {
+    margin: 10px 0; padding: 12px 14px;
+    background: #f7f9fb; border-radius: 8px;
+  }
+  .checklist.important { background: #fef2f2; border: 1px solid #fecaca; }
+  .checklist label {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 4px 0; cursor: pointer; font-size: 13.5px;
+  }
+  .checklist input[type=checkbox] { margin-top: 3px; cursor: pointer; }
+
+  /* NOTES */
+  .note-area { margin-top: 14px; }
+  .note-area label {
+    display: block; font-size: 11px;
+    text-transform: uppercase; color: #6b7280;
+    font-weight: 700; letter-spacing: 0.6px; margin-bottom: 4px;
+  }
+  .note-area textarea {
+    width: 100%; min-height: 80px;
+    padding: 10px 12px;
+    border: 1px solid #d6d9df; border-radius: 8px;
+    font: inherit; font-size: 13.5px;
+    line-height: 1.5; resize: vertical;
+    background: #fafbfc;
+  }
+  .note-area textarea:focus {
+    outline: 2px solid #2563eb33; background: white;
+  }
+  .note-area.cite textarea {
+    background: #fdf2f8; border-color: #fbcfe8;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 13px;
+  }
+  .note-area.numbers textarea {
+    background: #ecfdf5; border-color: #a7f3d0;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  h3.sub {
+    font-size: 13px; margin: 16px 0 6px;
+    color: #6b7280; text-transform: uppercase;
+    letter-spacing: 0.6px; font-weight: 700;
+  }
+
+  /* RULES + MATERIALS */
+  .rules {
+    background: #1a1d24; color: white;
+    border-radius: 14px; padding: 22px 26px; margin-top: 24px;
+  }
+  .rules h2 { color: white; margin-bottom: 14px; }
+  .rules ol { padding-left: 22px; }
+  .rules li { margin: 8px 0; font-size: 13.5px; color: #d6d9df; }
+  .rules strong { color: white; }
+
+  .materials {
+    background: #fdf2f8;
+    border: 1px solid #fbcfe8;
+    border-radius: 14px;
+    padding: 22px 26px; margin-top: 18px;
+  }
+  .materials h2 { color: #be185d; font-size: 17px; margin-bottom: 10px; }
+  .materials li { margin: 6px 0; font-size: 13.5px; color: #4d5563; }
+
+  .min-block {
+    background: #fef2f2; border: 1px solid #fecaca;
+    border-radius: 12px; padding: 18px 22px; margin-top: 20px;
+  }
+  .min-block h3 {
+    color: #c4302b; font-size: 14px;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    margin-bottom: 10px;
+  }
+  .min-block ol { padding-left: 22px; }
+  .min-block li { margin: 6px 0; font-size: 14px; }
+
+  hr { border: none; border-top: 1px solid #eef0f3; margin: 14px 0; }
+
+  /* RISK BOX */
+  .risk-box {
+    background: #fef9c3;
+    border: 1px solid #fde047;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    font-size: 13px;
+    color: #713f12;
+  }
+  .risk-box strong { color: #422006; }
+
+  /* PRINT */
+  @media print {
+    body { background: white; font-size: 11pt; }
+    .top { position: static; }
+    .timer-box, .nav { display: none; }
+    .section { break-inside: avoid; }
+    textarea { display: none; }
+    .note-area::after {
+      content: "_______________________________________________";
+      display: block; color: #ccc; padding: 16px 0;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 0 12px 60px; }
+    .section { padding: 16px 18px; border-radius: 12px; }
+    h2 { font-size: 17px; }
+    .question { font-size: 14.5px; padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-inner">
+    <div class="title-row">
+      <div class="title">Кейс-интервью: VOLK™ CrossFit — переход на подписки</div>
+      <div class="subtitle">40 минут · публикуемый кейс · специфика кроссфита и комьюнити</div>
+    </div>
+    <div class="timer-box" id="timerBox">
+      <span id="timerVal">00:00</span>
+      <button class="timer-btn" id="btnStart">Старт</button>
+      <button class="timer-btn" id="btnReset">Сброс</button>
+    </div>
+  </div>
+  <div class="top-inner">
+    <div class="nav">
+      <a href="#setup">0:00 Установка</a>
+      <a href="#context">0:03 Клуб</a>
+      <a href="#before">0:08 ДО: блоки</a>
+      <a href="#decision">0:14 Решение</a>
+      <a href="#process">0:19 Как переходили</a>
+      <a href="#after">0:27 Что сейчас</a>
+      <a href="#advice">0:35 Совет</a>
+      <a href="#closing">0:38 Закрытие</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="intro">
+  <h1>Кейс-интервью с VOLK™ CrossFit о переходе на подписки</h1>
+  <div class="lede">
+    <strong>Главное отличие от пилатес/йога кейсов:</strong> у CrossFit-клубов другая динамика — мини-группы с лимитом мест, высокая частота визитов (3–5 раз/нед.), сертифицированные тренеры CF L1/L2, сильное комьюнити-измерение.
+  </div>
+  <div class="stem">
+    🎯 <strong>Структура кейса:</strong> <strong>ДО</strong> (блоки 4/8/12/16) → <strong>РЕШЕНИЕ</strong> (почему именно GREY/WHITE подписка) → <strong>КАК</strong> (механика, бронирование, комьюнити) → <strong>ПОСЛЕ</strong> (цифры, частота визитов, дети) → <strong>СОВЕТ</strong> (для других CF-клубов).
+  </div>
+  <div class="case-flag">
+    🔊 <strong>3 типа золота для кейса</strong>: <strong>★ Ключевой</strong> · <strong>🔊 Цитата</strong> · <strong>📊 Цифры</strong>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- VOLK PROFILE BLOCK -->
+<div class="profile">
+  <h2>🐺 VOLK™ CrossFit · профиль клуба</h2>
+  <div class="grid">
+    <div class="cell">
+      <div class="cell-label">Формат</div>
+      <div class="cell-val">CrossFit-клуб, мини-группы + индивидуальные тренировки</div>
+    </div>
+    <div class="cell">
+      <div class="cell-label">Город</div>
+      <div class="cell-val">Москва (одна точка)</div>
+    </div>
+    <div class="cell">
+      <div class="cell-label">Программы</div>
+      <div class="cell-val">CrossFit, Power/ОФП, Athletic/СФП, Гимнастика, ТА, Мобильность, Волчата (дети)</div>
+    </div>
+    <div class="cell">
+      <div class="cell-label">Команда</div>
+      <div class="cell-val">4 тренера — Никита Травкин (главный), Дарья Брусенцова, Дарья Мезенцева, Андрей Павлов · все CF L1/L2</div>
+    </div>
+    <div class="cell">
+      <div class="cell-label">Сайт</div>
+      <div class="cell-val"><a href="https://volk.moscow" target="_blank">volk.moscow</a></div>
+    </div>
+    <div class="cell">
+      <div class="cell-label">Контакт</div>
+      <div class="cell-val">+7 499 490-57-57</div>
+    </div>
+  </div>
+
+  <div class="cell-label" style="margin-top: 8px; color: #8b919c;">Текущая тарифная сетка (с сайта)</div>
+  <table class="tariffs">
+    <thead><tr><th>Тариф</th><th>Цена</th><th>За тренировку</th></tr></thead>
+    <tbody>
+      <tr><td>Разовая</td><td>2 000 ₽</td><td>2 000</td></tr>
+      <tr><td>GREY VOLK 4</td><td>7 000 ₽</td><td>1 750</td></tr>
+      <tr><td>GREY VOLK 8</td><td>11 500 ₽</td><td>1 438</td></tr>
+      <tr><td>GREY VOLK 12</td><td>16 000 ₽</td><td>1 333</td></tr>
+      <tr><td>GREY VOLK 16</td><td>17 000 ₽</td><td>1 062</td></tr>
+      <tr><td>WHITE VOLK (самостоятельные)</td><td>10 500 ₽</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <div class="cell-label" style="margin-top: 8px; color: #fbbf24;">⚡ С сайта: «предусмотрена подписочная модель со скидками до 14%» — то есть подписка уже работает. Это пост-фактум кейс.</div>
+</div>
+
+<!-- ============================================================ -->
+<section class="section" id="setup">
+  <div class="section-head">
+    <span class="time-tag">0:00 — 0:03</span>
+    <span class="duration">3 мин</span>
+    <h2>Установка + разрешения</h2>
+  </div>
+  <div class="question">
+    «Спасибо, что согласились. Я Роман из Fitbase. Делаем кейс про VOLK — как клуб перешёл с системы блоков (4/8/12/16) на подписочную модель. По времени — 40 минут. С вашего разрешения веду запись».
+  </div>
+  <div class="checklist important">
+    <strong style="display: block; margin-bottom: 6px; font-size: 12px; color: #c4302b; letter-spacing: 0.5px;">⚠️ ПРОГОВОРИТЬ ДО ВОПРОСОВ</strong>
+    <label><input type="checkbox"> Согласие на запись (вслух)</label>
+    <label><input type="checkbox"> Согласие на использование названия VOLK™ CrossFit в материале</label>
+    <label><input type="checkbox"> Согласие на использование имени собственника / Никиты Травкина</label>
+    <label><input type="checkbox"> Согласие на цитирование (без согласования или с согласованием)</label>
+    <label><input type="checkbox"> Согласие на использование фото клуба / логотипа</label>
+    <label><input type="checkbox"> Уточнить: можно ли называть конкретные финансовые цифры (или давать в %)</label>
+    <label><input type="checkbox"> Уточнить: можно ли упоминать имена тренеров (Дарья Б., Дарья М., Андрей)</label>
+  </div>
+  <div class="note-area">
+    <label>Заметки по разрешениям</label>
+    <textarea data-key="consent" placeholder="Что разрешили / что нет / на каких условиях..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section" id="context">
+  <div class="section-head">
+    <span class="time-tag">0:03 — 0:08</span>
+    <span class="duration">5 мин</span>
+    <h2>Клуб — портрет (быстро, многое знаем с сайта)</h2>
+  </div>
+  <div class="probe-label">Уточняй только то, чего нет в профиле</div>
+
+  <div class="question">«Подтвердите, пожалуйста — VOLK как давно работает? Когда открылись?»</div>
+  <div class="question">«Сколько сейчас активных клиентов?»</div>
+  <ul class="probe">
+    <li>Из них взрослые / дети (Волчата) — соотношение</li>
+    <li>Сколько лет в среднем тренируются у вас?</li>
+    <li>Кто типичный клиент — какой портрет (возраст, опыт, мотивация)?</li>
+  </ul>
+
+  <div class="question">«Лицензия CrossFit™ — какие у вас обязательства как у официального клуба? Это влияет на ценообразование?»</div>
+  <p class="probe">Уточнить отличие от «обычного CrossFit-клуба». Это контекстный момент для статьи — премиум-обоснование.</p>
+
+  <div class="question">«Кто принимал решение о переходе на подписку — собственник, главный тренер, общее решение команды?»</div>
+
+  <div class="note-area">
+    <label>Заметки о клубе</label>
+    <textarea data-key="ctx" placeholder="Возраст клуба, размер базы, портрет клиента, лицензия CF, кто решал..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section before" id="before">
+  <div class="section-head">
+    <span class="time-tag">0:08 — 0:14</span>
+    <span class="duration">6 мин</span>
+    <h2>🔴 ДО: система блоков 4 / 8 / 12 / 16</h2>
+  </div>
+  <div class="probe-label">Цель: показать, что именно болело в блочной модели</div>
+
+  <div class="question">«До подписки у вас была только блочная система — 4/8/12/16 тренировок. Какие блоки покупали чаще?»</div>
+  <ul class="probe">
+    <li>GREY VOLK 12 как самый «среднестатистический» — да?</li>
+    <li>Кто покупал 16 — постоянные / спортсмены / готовящиеся к соревнованиям?</li>
+    <li>4 — для теста или для тех, кто не уверен?</li>
+  </ul>
+
+  <div class="question key">«Что было самым раздражающим в блочной системе — для клуба и для клиента?»</div>
+  <ul class="probe">
+    <li>Сгорание неиспользованных тренировок в блоке?</li>
+    <li>Заморозки — клиенты просят, надо ручкой делать?</li>
+    <li>«Куплю 12, схожу 6, продлю» — отток в середине блока?</li>
+    <li>Непредсказуемая выручка — то много покупают в январе, то пусто летом?</li>
+  </ul>
+
+  <div class="question numbers">«Какие были цифры в блочной модели — средний чек, частота визитов, retention клиента?»</div>
+  <ul class="probe">
+    <li>Средний чек на клиента в месяц?</li>
+    <li>Какой % купивших блок 12 ходили все 12 раз?</li>
+    <li>Через какое время клиент в среднем отвалился?</li>
+    <li>LTV клиента в среднем — сколько месяцев был с вами?</li>
+  </ul>
+
+  <div class="question sound">«Был конкретный момент, когда вы поняли — "блоки больше не работают, нужна другая модель"? Что произошло?»</div>
+  <p class="probe">🔊 Это <strong>лид кейса</strong>. Если есть конкретная сцена — золото.</p>
+
+  <div class="risk-box">
+    <strong>⚠️ Тонкость кроссфита:</strong> в блочной модели есть психологический момент — «у меня осталось 3 тренировки, надо отходить». Это <em>псевдо-мотивация</em>, которая на деле работает против лояльности (клиент думает в категориях «закрыть блок», а не «я в клубе»). Прокопай этот момент — он часто становится главным аргументом.
+  </div>
+
+  <div class="note-area cite">
+    <label>🔊 Цитаты ДО (дословно)</label>
+    <textarea data-key="cite-before" placeholder="«...»"></textarea>
+  </div>
+  <div class="note-area numbers">
+    <label>📊 Цифры ДО</label>
+    <textarea data-key="num-before" placeholder="Средний чек/мес: ...&#10;% выхаживающих весь блок: ...&#10;LTV (мес): ...&#10;Сезонность: ..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section decision" id="decision">
+  <div class="section-head">
+    <span class="time-tag">0:14 — 0:19</span>
+    <span class="duration">5 мин</span>
+    <h2>🟡 РЕШЕНИЕ: почему именно GREY/WHITE подписка</h2>
+  </div>
+
+  <div class="question">«Когда начали смотреть в сторону подписки — что подтолкнуло? Опыт других CF-клубов? Зарубежные кейсы? Статьи?»</div>
+  <ul class="probe">
+    <li>Кроссфит-аффилиаты США / Европы — там подписка норма?</li>
+    <li>Кто-то из российских коллег уже перешёл?</li>
+    <li>Внутренние сигналы от клиентов («хочу безлимит»)?</li>
+  </ul>
+
+  <div class="question">«Почему именно подписка, а не больше скидок на крупные блоки? Что подписка даёт принципиально другое?»</div>
+
+  <div class="question key">«Что больше всего пугало в переходе?» <span class="badge-cf badge-community">КОМЬЮНИТИ</span></div>
+  <ul class="probe">
+    <li>Постоянные клиенты с блоками — примут ли модель?</li>
+    <li>Сообщество CrossFit довольно консервативное — есть привычка «4 тренировки в неделю по блоку»</li>
+    <li>Перегрузка мини-групп — если все станут ходить чаще, мест не хватит?</li>
+    <li>Тренеры — как с их ЗП быть? Сейчас, видимо, % от блока</li>
+  </ul>
+
+  <div class="question">«Почему получились именно две линии — GREY (с тренером) и WHITE (самостоятельные)? Чья это была идея?»</div>
+  <p class="probe">«Архитектура подписки» — для кейса важно понять логику двух линий.</p>
+
+  <div class="question sound">«Что в итоге перевесило — что заставило сказать "ок, делаем"?»</div>
+
+  <div class="note-area cite">
+    <label>🔊 Цитаты РЕШЕНИЕ (дословно)</label>
+    <textarea data-key="cite-decision" placeholder="«...»"></textarea>
+  </div>
+  <div class="note-area">
+    <label>Заметки</label>
+    <textarea data-key="decision" placeholder="Источник идеи, сомнения, что перевесило, идея GREY/WHITE..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section process" id="process">
+  <div class="section-head">
+    <span class="time-tag">0:19 — 0:27</span>
+    <span class="duration">8 мин</span>
+    <h2>🔵 КАК ПЕРЕХОДИЛИ: механика</h2>
+  </div>
+
+  <h3 class="sub">Тарифная архитектура GREY / WHITE</h3>
+  <div class="question numbers">«Как пришли именно к GREY/WHITE? Что включено в каждую, чем отличаются?»</div>
+  <ul class="probe">
+    <li>GREY — все тренировки с тренером? Безлимит или лимит?</li>
+    <li>WHITE — самостоятельные тренировки? Кто это покупает?</li>
+    <li>Где скидка «до 14%» применяется — годовая подписка?</li>
+    <li>Дети (Волчата) — отдельный тариф или включён?</li>
+  </ul>
+
+  <h3 class="sub">Бронирование в мини-группах <span class="badge-cf badge-mini">МИНИ-ГРУППЫ</span></h3>
+  <div class="question key">«В CrossFit мини-группа — это критично. Как организовали бронирование при подписке? Что если все хотят ходить по 5 раз в неделю и места не хватает?»</div>
+  <ul class="probe">
+    <li>Лимит броней в неделю на одну подписку?</li>
+    <li>Резервный лист — если место освободилось?</li>
+    <li>«Не пришёл — снимаем тренировку» — есть ли такое правило?</li>
+    <li>Как технически реализовано — через приложение Fitbase?</li>
+  </ul>
+
+  <h3 class="sub">Коммуникация с действующими клиентами <span class="badge-cf badge-community">КОМЬЮНИТИ</span></h3>
+  <div class="question">«Что делали с теми, у кого был активный блок? Доходили все?»</div>
+  <ul class="probe">
+    <li>Конвертировали в подписку с зачётом / переходили после окончания блока?</li>
+    <li>Как объясняли преимущества?</li>
+    <li>Сколько % приняли модель сразу, сколько остались на блоках?</li>
+    <li>Кто-то отказался и ушёл? Кто именно?</li>
+  </ul>
+
+  <div class="question sound">«Помните клиента, который первым купил подписку? Какая была реакция? И обратно — был ли кто-то, кто наотрез отказался?»</div>
+  <p class="probe">🔊 Конкретные сцены — золото для кейса.</p>
+
+  <h3 class="sub">Тренеры — изменение ЗП-модели <span class="badge-cf badge-trainers">ТРЕНЕРЫ</span></h3>
+  <div class="question">«Как изменилась ЗП-модель тренеров после перехода?»</div>
+  <ul class="probe">
+    <li>Был % от продажи блока — теперь по факту тренировки?</li>
+    <li>Кто согласовывал — обсуждали с тренерами заранее?</li>
+    <li>Кто-то ушёл из-за изменений?</li>
+    <li>В итоге заработок тренеров — вырос, упал, остался?</li>
+  </ul>
+
+  <h3 class="sub">Кассовый разрыв</h3>
+  <div class="question numbers">«Был ли просадка в кассе в первые месяцы? Насколько?»</div>
+  <ul class="probe">
+    <li>Какой был худший месяц по выручке?</li>
+    <li>Через сколько вернулись к доперехода?</li>
+    <li>Как пережили — резерв, кредит, прошло мягче?</li>
+  </ul>
+
+  <div class="question sound">«Что было самым сложным в первые 3 месяца перехода?»</div>
+
+  <div class="note-area cite">
+    <label>🔊 Цитаты ПРОЦЕСС (дословно)</label>
+    <textarea data-key="cite-process" placeholder="«...»"></textarea>
+  </div>
+  <div class="note-area numbers">
+    <label>📊 Цифры ПРОЦЕСС</label>
+    <textarea data-key="num-process" placeholder="GREY: ... тренировок / лимит&#10;WHITE: ...&#10;Скидка 14% — где&#10;% перешедших с блоков: ...&#10;Просадка кассы: ...%, ... мес"></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section after" id="after">
+  <div class="section-head">
+    <span class="time-tag">0:27 — 0:35</span>
+    <span class="duration">8 мин</span>
+    <h2>🟢 ПОСЛЕ: что изменилось</h2>
+  </div>
+
+  <h3 class="sub">Цифры «было / стало»</h3>
+  <div class="question numbers">«Какие сейчас ключевые цифры — выручка, активная база, retention?»</div>
+  <ul class="probe">
+    <li>Выручка в месяц — на сколько % изменилась?</li>
+    <li>Активная база — выросла, состав изменился?</li>
+    <li>ARPU клиента в месяц — выше / ниже / тот же?</li>
+    <li>Retention (продление подписки) — какой %?</li>
+    <li>Сезонность — январь / лето теперь как?</li>
+  </ul>
+
+  <h3 class="sub">Частота визитов <span class="badge-cf badge-mini">МИНИ-ГРУППЫ</span></h3>
+  <div class="question key">«Как изменилась средняя частота визитов? Ходят больше — как ожидали?»</div>
+  <ul class="probe">
+    <li>Среднее число тренировок в неделю — было / стало?</li>
+    <li>Кто-то стал «злоупотреблять» подпиской — 5–6 раз/нед?</li>
+    <li>Загрузка часов пик — критическая? Менялись ли часы пик?</li>
+    <li>«Пришёл — забронировал — не пришёл» — есть проблема, как решили?</li>
+  </ul>
+
+  <h3 class="sub">Комьюнити и удержание <span class="badge-cf badge-community">КОМЬЮНИТИ</span></h3>
+  <div class="question key">«Психология клиента изменилась? Они теперь "члены клуба" или всё ещё считают тренировки?»</div>
+  <ul class="probe">
+    <li>«Не хочу пропустить, это моё» vs «у меня осталось N»</li>
+    <li>Социальные связи внутри группы — стали крепче?</li>
+    <li>Сарафан — приходит больше через рекомендации?</li>
+    <li>Появились «звёздные» клиенты, на которых ровняется группа?</li>
+  </ul>
+
+  <h3 class="sub">Дети — Волчата <span class="badge-cf badge-children">ДЕТИ</span></h3>
+  <div class="question">«Как с детским сегментом — Волчата? Подписка зашла родителям или сначала сопротивлялись?»</div>
+  <ul class="probe">
+    <li>Семейные тарифы есть?</li>
+    <li>Родители платят отдельно или вместе со своей подпиской?</li>
+    <li>Retention детей — выше или ниже взрослых?</li>
+    <li>Сезонность детская (каникулы) — как с этим в подписке?</li>
+  </ul>
+
+  <h3 class="sub">Тренеры — итоги <span class="badge-cf badge-trainers">ТРЕНЕРЫ</span></h3>
+  <div class="question">«Тренеры — довольны новой моделью? Заработок?»</div>
+
+  <h3 class="sub">Операционка</h3>
+  <div class="question">«Что изменилось в вашем рабочем дне?»</div>
+  <ul class="probe">
+    <li>Что больше не делаете руками?</li>
+    <li>Какие отчёты теперь видите, которых не было?</li>
+    <li>Сколько времени экономите в неделю?</li>
+  </ul>
+
+  <div class="question sound">«Был ли момент, когда поняли — да, получилось? Какое было ощущение?»</div>
+
+  <div class="note-area cite">
+    <label>🔊 Цитаты ПОСЛЕ (дословно)</label>
+    <textarea data-key="cite-after" placeholder="«...»"></textarea>
+  </div>
+  <div class="note-area numbers">
+    <label>📊 Цифры ПОСЛЕ (главное для визуализации)</label>
+    <textarea data-key="num-after" placeholder="Выручка: было ... → стало ...&#10;База: ...&#10;ARPU: ...&#10;Visit frequency: ...&#10;Retention: ...&#10;Дети: ...&#10;Тренеры: ..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section advice" id="advice">
+  <div class="section-head">
+    <span class="time-tag">0:35 — 0:38</span>
+    <span class="duration">3 мин</span>
+    <h2>💡 СОВЕТ другим клубам</h2>
+  </div>
+
+  <div class="question sound">«Если бы вы могли вернуться в день, когда только думали о переходе — что бы себе сказали?»</div>
+
+  <div class="question sound">«Какие 3 главные ошибки могла бы избежать студия / клуб, который сейчас на старте перехода?»</div>
+
+  <div class="question key">«Кому подписочная модель в CrossFit / похожих форматах НЕ подходит? Когда лучше остаться на блоках?»</div>
+  <p class="probe">Важно для честности кейса.</p>
+
+  <div class="question">«Подходит ли модель не-CrossFit залам с похожей высокой частотой? Бокс, MMA, тяжёлая атлетика, единоборства?»</div>
+
+  <div class="question">«Что бы добавили в Fitbase, чтобы переход был ещё легче для CF-клубов? Что именно в нашем продукте недоработано под кроссфит?»</div>
+  <p class="probe">Для нас — материал в roadmap. Особенно важно: лимиты в мини-группах, бронирование, подписки с ограничениями.</p>
+
+  <div class="note-area cite">
+    <label>🔊 Цитаты СОВЕТ (дословно, для финала кейса)</label>
+    <textarea data-key="cite-advice" placeholder="«...»"></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section" id="closing">
+  <div class="section-head">
+    <span class="time-tag">0:38 — 0:40</span>
+    <span class="duration">2 мин</span>
+    <h2>Закрытие + материалы</h2>
+  </div>
+  <div class="question">«Что-то важное упустил, о чём хотите добавить?»</div>
+  <div class="question">«Какие материалы вы могли бы прислать для кейса?»</div>
+  <ul class="probe">
+    <li>Фото клуба (бокса), тренировок в мини-группе</li>
+    <li>Логотип VOLK™ в высоком разрешении</li>
+    <li>Скриншоты дашборда Fitbase (с разрешения)</li>
+    <li>Фото Никиты и команды тренеров (face attribution)</li>
+    <li>Фото детских групп (Волчата) — отдельно согласовать с родителями</li>
+  </ul>
+  <div class="question">«Спасибо! Кейс пришлю на согласование до публикации».</div>
+
+  <div class="checklist important">
+    <strong style="display: block; margin-bottom: 6px; font-size: 12px; color: #c4302b; letter-spacing: 0.5px;">⚠️ ПОДТВЕРДИТЬ ПЕРЕД ПРОЩАНИЕМ</strong>
+    <label><input type="checkbox"> Финал — согласие на публикацию подтверждено</label>
+    <label><input type="checkbox"> Контакт для пересылки материалов</label>
+    <label><input type="checkbox"> Договорились о превью перед публикацией</label>
+    <label><input type="checkbox"> Запись сохранена локально</label>
+    <label><input type="checkbox"> Дата интервью записана</label>
+    <label><input type="checkbox"> С детскими фото — отдельное согласование с родителями</label>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<div class="rules">
+  <h2>🎯 Правила кейс-интервью с CrossFit-клубом</h2>
+  <ol>
+    <li><strong>Цифры ВСЕГДА просите.</strong> В CF легче получить — клуб обычно знает retention, частоту визитов, ARPU. Кейс без цифр — не кейс.</li>
+    <li><strong>Дословно цитируй.</strong> «У нас клиент Сергей в марте сказал — я уже не считаю тренировки, я просто прихожу» — золото.</li>
+    <li><strong>Конкретные сцены.</strong> «Когда мы запустили GREY, в первую неделю на 18:00 пришло 24 человека вместо 12…»</li>
+    <li><strong>Не предлагай готовых ответов.</strong> «Психология клиента изменилась?» — да. «У клиентов стало больше мотивации?» — нет.</li>
+    <li><strong>Эмоции тренера → особенно ценны.</strong> CF-тренеры эмоциональные. Цитата «я устал считать кто сколько раз пришёл за блок» — мощно.</li>
+    <li><strong>Не путать с франшизой.</strong> CrossFit™ — товарный знак + сертификация, не франшиза. Уточнить при упоминании.</li>
+    <li><strong>Кейс-герой — собственник/тренер VOLK, не Fitbase.</strong> Мы помогаем — герой делает.</li>
+    <li><strong>Не критиковать рынок.</strong> Других CF-клубов Москвы не упоминать в негативе.</li>
+    <li><strong>Дети — деликатно.</strong> Не углубляйся в финансы детских групп без явного согласия.</li>
+    <li><strong>Финал — про совет.</strong> Самая ценная часть для читателя.</li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<div class="materials">
+  <h2>📦 Что попросить прислать после интервью</h2>
+  <ul>
+    <li>Фото зала / бокса VOLK (минимум 3) — атмосфера, тренировка, оборудование. JPG в высоком разрешении.</li>
+    <li>Фото Никиты Травкина и команды тренеров — для атрибуции цитат.</li>
+    <li>Логотип VOLK™ в PNG/SVG.</li>
+    <li>Скриншоты дашборда Fitbase с цифрами (с разрешения).</li>
+    <li>Скриншот тарифной сетки в актуальной версии.</li>
+    <li>Если есть — посты VOLK в соцсетях об анонсе подписки.</li>
+    <li>Фото детских групп — <strong>отдельное согласование с родителями.</strong></li>
+    <li>Контакт для согласования финальной версии кейса.</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<div class="min-block">
+  <h3>Если идёт «не туда» — минимум на 20 минут</h3>
+  <ol>
+    <li><strong>Когда поняли, что блоки больше не работают?</strong> (3 мин)</li>
+    <li><strong>Кто/что подтолкнул к подпискам — почему именно GREY/WHITE?</strong> (3 мин)</li>
+    <li><strong>Как организовали бронирование в мини-группах?</strong> (3 мин)</li>
+    <li><strong>Как тренеры реагировали — ЗП-модель изменилась?</strong> (3 мин)</li>
+    <li><strong>Что было с кассой в первые месяцы?</strong> (2 мин)</li>
+    <li><strong>Что сейчас по выручке, частоте визитов, retention?</strong> (3 мин)</li>
+    <li><strong>Что бы посоветовали другим CF-клубам?</strong> (3 мин)</li>
+  </ol>
+  <p style="margin-top: 10px; font-size: 13px; color: #6b7280;">
+    7 ответов = публикуемый кейс ~1500 слов.
+  </p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section">
+  <h2 style="margin-bottom: 14px;">📝 Структура готового кейса о VOLK</h2>
+  <ol style="padding-left: 22px; line-height: 1.8;">
+    <li><strong>Лид</strong> — сцена с тренировки / цитата тренера / конкретный момент перехода</li>
+    <li><strong>VOLK в цифрах</strong> — шапка (название, формат CF, Москва, команда CF L1/L2)</li>
+    <li><strong>Что было до</strong> — блочная система, психология «закрыть блок», цифры (2–3 абзаца + цитата)</li>
+    <li><strong>Решение</strong> — что подтолкнуло, идея GREY/WHITE архитектуры, сомнения (2 абзаца)</li>
+    <li><strong>Как переходили</strong> — пошагово: GREY vs WHITE, бронирование мини-групп, коммуникация, ЗП тренеров, кассовый разрыв (5 абзацев + цифры)</li>
+    <li><strong>Что получилось</strong> — выручка, частота визитов, retention, комьюнити, дети (4 абзаца + графика «было/стало»)</li>
+    <li><strong>Совет другим клубам</strong> — 3–5 пунктов от Никиты / собственника</li>
+    <li><strong>Финальная цитата</strong> — эмоциональная, про комьюнити</li>
+    <li><strong>CTA</strong> — связаться с нами для аналогичного перехода</li>
+  </ol>
+</div>
+
+<div style="text-align: center; margin-top: 24px;">
+  <button onclick="window.print()" style="background: #1a1d24; color: white; border: none; padding: 12px 24px; border-radius: 100px; font-weight: 600; cursor: pointer;">🖨 Распечатать</button>
+  <button onclick="exportNotes()" style="background: #db2777; color: white; border: none; padding: 12px 24px; border-radius: 100px; font-weight: 600; cursor: pointer; margin-left: 8px;">📋 Экспорт заметок в Markdown</button>
+  <button onclick="if(confirm('Очистить все заметки и чекбоксы?')) { localStorage.clear(); location.reload(); }" style="background: #eef0f3; color: #4d5563; border: none; padding: 12px 24px; border-radius: 100px; font-weight: 600; cursor: pointer; margin-left: 8px;">Очистить</button>
+</div>
+
+</div>
+
+<script>
+// === TIMER ===
+let secs = 0, tick = null;
+const box = document.getElementById('timerBox');
+const val = document.getElementById('timerVal');
+const btnStart = document.getElementById('btnStart');
+const btnReset = document.getElementById('btnReset');
+
+function render() {
+  const m = String(Math.floor(secs / 60)).padStart(2, '0');
+  const s = String(secs % 60).padStart(2, '0');
+  val.textContent = m + ':' + s;
+  box.classList.toggle('warn', secs >= 30*60 && secs < 38*60);
+  box.classList.toggle('crit', secs >= 38*60);
+}
+btnStart.addEventListener('click', () => {
+  if (tick) { clearInterval(tick); tick = null; btnStart.textContent = 'Старт'; }
+  else { tick = setInterval(() => { secs++; render(); }, 1000); btnStart.textContent = 'Пауза'; }
+});
+btnReset.addEventListener('click', () => {
+  clearInterval(tick); tick = null; secs = 0; render(); btnStart.textContent = 'Старт';
+});
+render();
+
+// === NOTES PERSISTENCE ===
+document.querySelectorAll('textarea[data-key]').forEach(t => {
+  const k = 'note_volk_' + t.dataset.key;
+  const saved = localStorage.getItem(k);
+  if (saved) t.value = saved;
+  t.addEventListener('input', () => localStorage.setItem(k, t.value));
+});
+
+// === CHECKBOX PERSISTENCE ===
+document.querySelectorAll('input[type=checkbox]').forEach((c, i) => {
+  const k = 'chk_volk_' + i;
+  c.checked = localStorage.getItem(k) === '1';
+  c.addEventListener('change', () => localStorage.setItem(k, c.checked ? '1' : '0'));
+});
+
+// === NAV PROGRESS ===
+const sections = document.querySelectorAll('.section[id]');
+const navLinks = document.querySelectorAll('.nav a');
+window.addEventListener('scroll', () => {
+  sections.forEach((sec, i) => {
+    const rect = sec.getBoundingClientRect();
+    if (rect.bottom < 200 && navLinks[i]) navLinks[i].classList.add('done');
+  });
+});
+
+// === EXPORT NOTES TO MARKDOWN ===
+function exportNotes() {
+  const labels = {
+    'consent': 'Разрешения',
+    'ctx': 'VOLK — контекст',
+    'cite-before': 'Цитаты ДО (блоки)',
+    'num-before': 'Цифры ДО',
+    'cite-decision': 'Цитаты РЕШЕНИЕ',
+    'decision': 'РЕШЕНИЕ — заметки',
+    'cite-process': 'Цитаты ПРОЦЕСС',
+    'num-process': 'Цифры ПРОЦЕСС',
+    'cite-after': 'Цитаты ПОСЛЕ',
+    'num-after': 'Цифры ПОСЛЕ',
+    'cite-advice': 'Цитаты СОВЕТ',
+  };
+  const now = new Date().toISOString().slice(0, 10);
+  let md = '# Кейс-интервью: VOLK™ CrossFit — переход на подписки\n\n';
+  md += '*Дата: ' + now + '*\n\n';
+  md += '*Клуб: VOLK™ CrossFit, Москва · volk.moscow*\n\n---\n\n';
+  for (const [k, label] of Object.entries(labels)) {
+    const val = localStorage.getItem('note_volk_' + k) || '';
+    if (val.trim()) {
+      md += '## ' + label + '\n\n' + val + '\n\n';
+    }
+  }
+  const blob = new Blob([md], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'case_volk_crossfit_' + now + '.md';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>
