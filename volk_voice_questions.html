@@ -13,7 +13,7 @@
     line-height: 1.6;
     font-size: 16px;
   }
-  .wrap { max-width: 720px; margin: 0 auto; padding: 40px 22px 80px; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 40px 22px 80px; }
 
   .hero {
     background: #1a1d24;
@@ -32,6 +32,13 @@
     font-size: 110px;
     opacity: 0.12;
     transform: rotate(15deg);
+  }
+  .greeting {
+    color: #fbbf24;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
   }
   .badge {
     display: inline-block;
@@ -55,14 +62,7 @@
     color: #d6d9df;
     font-size: 15px;
     line-height: 1.6;
-    max-width: 560px;
-  }
-  .hero .greeting {
-    color: #fbbf24;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 6px;
-    letter-spacing: 0.3px;
+    max-width: 580px;
   }
 
   .how {
@@ -88,13 +88,13 @@
   .how li { margin: 6px 0; }
   .how strong { color: #1a1d24; }
 
+  /* QUESTION CARDS */
   .qcard {
     background: white;
     border-radius: 18px;
     padding: 26px 30px;
     margin-bottom: 16px;
     border: 1px solid #e4e6eb;
-    position: relative;
   }
   .qhead {
     display: flex;
@@ -121,32 +121,137 @@
     text-transform: uppercase;
     letter-spacing: 0.7px;
     font-weight: 700;
+    flex: 1;
   }
-  .qbody {
+  .qduration {
+    font-size: 11px;
+    color: #6b7280;
+    background: #eef0f3;
+    padding: 3px 8px;
+    border-radius: 100px;
+    font-weight: 600;
+  }
+  .qmain {
     font-size: 16.5px;
-    line-height: 1.6;
-    color: #1a1d24;
-    font-weight: 500;
-  }
-  .qhints {
-    margin-top: 12px;
-    padding: 12px 14px;
-    background: #f7f9fb;
-    border-radius: 10px;
-    font-size: 13.5px;
-    color: #4d5563;
     line-height: 1.55;
+    color: #1a1d24;
+    font-weight: 600;
+    margin-bottom: 18px;
   }
-  .qhints-label {
-    display: block;
-    font-size: 10px;
+
+  /* INNER STRUCTURE */
+  .qsub {
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.7px;
     color: #6b7280;
     font-weight: 700;
-    margin-bottom: 4px;
+    margin: 18px 0 8px;
+  }
+  .qsub:first-of-type { margin-top: 0; }
+
+  .qbullets {
+    list-style: none;
+    padding-left: 0;
+  }
+  .qbullets li {
+    font-size: 14.5px;
+    color: #4d5563;
+    line-height: 1.5;
+    padding: 5px 0 5px 16px;
+    position: relative;
+  }
+  .qbullets li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    top: 3px;
+    color: #9ca3af;
+    font-weight: 700;
   }
 
+  /* KEY PROBE */
+  .qkey {
+    background: #fff8e6;
+    border-left: 3px solid #f59e0b;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 14px 0;
+    font-size: 14.5px;
+    color: #1a1d24;
+    font-weight: 500;
+    line-height: 1.55;
+  }
+  .qkey-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    color: #b87502;
+    font-weight: 700;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  /* NUMBERS HIGHLIGHT */
+  .qnums {
+    background: #ecfdf5;
+    border-left: 3px solid #047857;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 14px 0;
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+  .qnums-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    color: #047857;
+    font-weight: 700;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .qnums ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .qnums li {
+    padding: 3px 0 3px 16px;
+    position: relative;
+    color: #064e3b;
+    font-size: 14px;
+  }
+  .qnums li::before {
+    content: "📊";
+    position: absolute;
+    left: 0;
+    top: 3px;
+    font-size: 10px;
+  }
+
+  /* CITE HIGHLIGHT */
+  .qcite {
+    background: #fdf2f8;
+    border-left: 3px solid #db2777;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 14px 0;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: #1a1d24;
+  }
+  .qcite-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    color: #be185d;
+    font-weight: 700;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  /* TOPIC COLORS */
   .topic-context { color: #2563eb; }
   .topic-before { color: #c4302b; }
   .topic-decision { color: #b8580a; }
@@ -155,6 +260,7 @@
   .topic-future { color: #db2777; }
   .topic-advice { color: #7c3aed; }
 
+  /* CLOSING */
   .thanks {
     background: linear-gradient(135deg, #fdf2f8 0%, #ecf3ff 100%);
     border-radius: 18px;
@@ -203,21 +309,9 @@
     margin-bottom: 10px;
     font-weight: 700;
   }
-  .materials ul {
-    list-style: none;
-    color: #4d5563;
-    font-size: 14.5px;
-  }
-  .materials li {
-    padding: 5px 0 5px 24px;
-    position: relative;
-  }
-  .materials li::before {
-    content: "📎";
-    position: absolute;
-    left: 0;
-    top: 5px;
-  }
+  .materials ul { list-style: none; color: #4d5563; font-size: 14.5px; }
+  .materials li { padding: 5px 0 5px 24px; position: relative; }
+  .materials li::before { content: "📎"; position: absolute; left: 0; top: 5px; }
 
   footer {
     text-align: center;
@@ -232,7 +326,8 @@
     .hero { padding: 24px 22px 22px; border-radius: 18px; }
     .hero h1 { font-size: 22px; }
     .qcard { padding: 20px 22px; border-radius: 14px; }
-    .qbody { font-size: 15.5px; }
+    .qmain { font-size: 15.5px; }
+    .qbullets li, .qkey, .qnums, .qcite { font-size: 14px; }
   }
 </style>
 </head>
@@ -244,7 +339,7 @@
     <span class="badge">7 ВОПРОСОВ · 10–15 МИНУТ</span>
     <h1>История VOLK и подписки — голосом, в удобном ритме</h1>
     <p>
-      Жаль, что не получилось созвониться. Давайте проще — запишите голосовые ответы на 7 вопросов ниже, когда удобно. На каждый — 1–2 минуты. Я соберу из этого кейс и пришлю на согласование до публикации.
+      Жаль, что не получилось созвониться. Давайте проще — запишите голосовые ответы на 7 вопросов ниже, когда удобно. На каждый — 1–3 минуты. Внутри каждого вопроса я добавил подсказки, о чём бы хотелось услышать — это поможет мне собрать качественный кейс.
     </p>
   </div>
 
@@ -252,105 +347,227 @@
     <h3>Как это работает</h3>
     <ol>
       <li>Запишите <strong>7 голосовых в Telegram</strong> — по одному на вопрос. Можно подряд или растянуть на пару дней.</li>
-      <li>Каждый ответ — <strong>1–2 минуты</strong>. Не нужно идеально, говорите свободно.</li>
-      <li>Если вспомните цифры или конкретные истории — <strong>отдельным голосовым</strong>, добавлю в материал.</li>
+      <li>Каждый ответ — <strong>1–3 минуты</strong>. Не нужно идеально, говорите свободно.</li>
+      <li>Внутри каждого вопроса есть подсказки — <strong>пройдитесь по тем, которые откликаются</strong>, не обязательно все.</li>
+      <li>Если вспомните цифры или истории — <strong>отдельным голосовым</strong>, добавлю в материал.</li>
       <li>Кейс <strong>покажу до публикации</strong>, имя клуба и ваше — только с вашего разрешения.</li>
     </ol>
   </div>
 
-  <!-- Q1 -->
+  <!-- ============================================================ Q1 -->
   <div class="qcard">
     <div class="qhead">
       <div class="qnum">1</div>
       <div class="qtopic topic-context">Про VOLK коротко</div>
+      <div class="qduration">≈ 1 мин</div>
     </div>
-    <div class="qbody">
-      Расскажите немного про VOLK — как давно работаете, какое у вас сообщество, что для вас в клубе самое важное. И коротко — какая у вас лично роль в клубе.
+    <div class="qmain">
+      Расскажите немного про VOLK — как давно работаете, что для вас в клубе самое важное.
     </div>
+
+    <div class="qsub">О чём поговорить</div>
+    <ul class="qbullets">
+      <li>Сколько лет клубу</li>
+      <li>Ваша роль и история — как пришли в проект</li>
+      <li>Размер сообщества (примерно — активных людей)</li>
+      <li>Что вас лично заводит в этом деле</li>
+    </ul>
   </div>
 
-  <!-- Q2 -->
+  <!-- ============================================================ Q2 -->
   <div class="qcard">
     <div class="qhead">
       <div class="qnum">2</div>
       <div class="qtopic topic-before">Как было раньше</div>
+      <div class="qduration">≈ 2 мин</div>
     </div>
-    <div class="qbody">
-      Какая у вас была тарифная модель раньше? Что в ней нравилось, что начало мешать — и клубу, и клиентам?
+    <div class="qmain">
+      Какая у вас была тарифная модель раньше? Что в ней нравилось, что начало мешать — клубу и клиентам?
     </div>
-    <div class="qhints">
-      <span class="qhints-label">Если вспомните</span>
-      Конкретный момент или ситуация, после которой вы поняли, что нужно что-то менять. Это самое ценное для кейса.
+
+    <div class="qsub">Что пошло хорошо</div>
+    <ul class="qbullets">
+      <li>Какие тарифы предлагали (можно коротко)</li>
+      <li>Что в этой модели работало стабильно</li>
+      <li>Кто был типичным клиентом</li>
+    </ul>
+
+    <div class="qsub">Что начало мешать</div>
+    <ul class="qbullets">
+      <li>Сезонность — выручка плавает по месяцам</li>
+      <li>«Закрыть блок» вместо «я в клубе» — психология клиента</li>
+      <li>Скидки и распродажи как вынужденная мера</li>
+      <li>Сложности с заморозками, переносами</li>
+      <li>Касса = аванс, реальная прибыль не видна</li>
+    </ul>
+
+    <div class="qcite">
+      <span class="qcite-label">🔊 Если вспомните — особенно ценно</span>
+      Конкретный момент, день, или ситуация с клиентом, после которой стало очевидно — пора менять модель. Такие сцены — золото для кейса.
     </div>
   </div>
 
-  <!-- Q3 -->
+  <!-- ============================================================ Q3 -->
   <div class="qcard">
     <div class="qhead">
       <div class="qnum">3</div>
-      <div class="qtopic topic-decision">Почему подписка</div>
+      <div class="qtopic topic-decision">Почему именно подписка</div>
+      <div class="qduration">≈ 2 мин</div>
     </div>
-    <div class="qbody">
-      Когда задумались про подписку — кто или что подтолкнуло? Кейсы коллег, опыт зарубежных клубов, сигналы от клиентов? И что больше всего пугало или вызывало сомнения?
+    <div class="qmain">
+      Когда задумались про подписку — кто или что подтолкнуло? Что больше всего сомневало?
+    </div>
+
+    <div class="qsub">Источник идеи</div>
+    <ul class="qbullets">
+      <li>Кейсы коллег / зарубежных клубов</li>
+      <li>Статьи, конференции, чаты</li>
+      <li>Сигналы от самих клиентов — кто-то просил безлимит?</li>
+      <li>Внутренний анализ — посчитали и поняли</li>
+    </ul>
+
+    <div class="qsub">Что пугало</div>
+    <ul class="qbullets">
+      <li>Кассовый разрыв — главный страх?</li>
+      <li>«Клиенты не примут» / уйдут</li>
+      <li>Перегрузка тренировок при безлимите</li>
+      <li>Как быть с тренерами, их ЗП</li>
+      <li>Технически — справится ли система</li>
+    </ul>
+
+    <div class="qkey">
+      <span class="qkey-label">★ Ключевой</span>
+      Что в итоге перевесило сомнения — что заставило сказать «ок, делаем»?
     </div>
   </div>
 
-  <!-- Q4 -->
+  <!-- ============================================================ Q4 -->
   <div class="qcard">
     <div class="qhead">
       <div class="qnum">4</div>
       <div class="qtopic topic-process">Как внедряли</div>
+      <div class="qduration">≈ 2 мин</div>
     </div>
-    <div class="qbody">
-      Как вы вводили подписку — резко переключились или внедряли параллельно с тем, что было? Как разговаривали с действующими клиентами? Реакция была какая — приняли, спорили?
+    <div class="qmain">
+      Как вводили подписку — резко переключились или внедряли параллельно? Как разговаривали с действующими клиентами?
     </div>
-    <div class="qhints">
-      <span class="qhints-label">Подсказка</span>
-      Если кто-то наотрез отказался или, наоборот, сразу включился — конкретная история работает лучше всего.
+
+    <div class="qsub">Механика запуска</div>
+    <ul class="qbullets">
+      <li>Резкий переход или гибрид с самого начала</li>
+      <li>Что сделали с теми, у кого была активная старая модель</li>
+      <li>Welcome-условия (скидки, бонусы) — были или нет</li>
+      <li>Сколько времени заняла подготовка</li>
+    </ul>
+
+    <div class="qsub">Коммуникация и реакция</div>
+    <ul class="qbullets">
+      <li>Какой был главный аргумент для клиентов</li>
+      <li>Кто принял сразу, кто спорил, кто ушёл</li>
+      <li>Как обучили команду / администраторов</li>
+      <li>Был ли неожиданный сегмент клиентов, который купил подписку первым</li>
+    </ul>
+
+    <div class="qcite">
+      <span class="qcite-label">🔊 Если вспомните — конкретные истории</span>
+      Первый клиент, который купил подписку — какая была реакция. Или, наоборот, тот, кто наотрез отказался. Конкретные сцены работают сильнее любых обобщений.
     </div>
   </div>
 
-  <!-- Q5 -->
-  <div class="qcard">
+  <!-- ============================================================ Q5 — KEY -->
+  <div class="qcard" style="border: 2px solid #047857;">
     <div class="qhead">
       <div class="qnum">5</div>
-      <div class="qtopic topic-compare">Сравнение моделей сегодня</div>
+      <div class="qtopic topic-compare">Сравнение моделей сейчас · главный блок</div>
+      <div class="qduration">≈ 3 мин</div>
     </div>
-    <div class="qbody">
-      Сейчас у вас сосуществуют разные форматы оплаты — подписка, разовые, что-то ещё. Какой клиент выбирает подписку, а какой — разовое? Что вы по факту видите — кто чаще ходит, кто дольше остаётся, какая средняя выручка по каждой модели?
+    <div class="qmain">
+      Сейчас у вас сосуществуют разные форматы оплаты — подписка, разовые, что-то ещё. Какой клиент выбирает что — и что вы по факту видите?
     </div>
-    <div class="qhints">
-      <span class="qhints-label">Самое интересное для кейса</span>
-      Цифры (можно в процентах): доля подписки в выручке, retention, частота визитов «подписочников» против «разовиков». Если есть наблюдения — почему один клиент идёт в подписку, а другой нет.
+
+    <div class="qnums">
+      <span class="qnums-label">📊 Цифры (можно в %, не обязательно абсолютные)</span>
+      <ul>
+        <li>Доля подписки в общей выручке</li>
+        <li>Доля подписочников в активной базе</li>
+        <li>Как часто ходят подписочники vs остальные</li>
+        <li>Retention — кто дольше остаётся с клубом</li>
+        <li>Средняя выручка с клиента по каждой модели</li>
+      </ul>
+    </div>
+
+    <div class="qsub">Поведение клиентов</div>
+    <ul class="qbullets">
+      <li>Кто чаще выбирает подписку — портрет?</li>
+      <li>Кто остаётся на разовых — почему</li>
+      <li>Поменялась ли психология клиентов на подписке — «я в клубе» вместо «я считаю»</li>
+      <li>Сарафан — пришло ли больше клиентов через рекомендации</li>
+      <li>Комьюнити стало крепче или нет</li>
+    </ul>
+
+    <div class="qkey">
+      <span class="qkey-label">★ Самое сильное для кейса</span>
+      Стали ли подписочники «членами клуба» — те, для кого VOLK перестал быть «местом, куда покупаю занятия», а стал частью жизни? Это самое мощное наблюдение, ради которого пишутся кейсы про переход на подписку.
     </div>
   </div>
 
-  <!-- Q6 -->
+  <!-- ============================================================ Q6 -->
   <div class="qcard">
     <div class="qhead">
       <div class="qnum">6</div>
       <div class="qtopic topic-future">Куда движется</div>
+      <div class="qduration">≈ 1 мин</div>
     </div>
-    <div class="qbody">
-      Планируете ли вы полный переход на подписку или гибрид останется надолго? Что для вас идеальная модель через год-два — и почему?
+    <div class="qmain">
+      Планируете ли вы полный переход на подписку или гибрид останется надолго? Что для вас идеальная модель?
+    </div>
+
+    <div class="qsub">О чём поговорить</div>
+    <ul class="qbullets">
+      <li>Через год-два — каким видите тариф VOLK</li>
+      <li>Полный переход или гибрид — что лучше для вашего сегмента</li>
+      <li>Что бы хотели добавить в модель (дети, семейные, новые форматы)</li>
+      <li>Что бы добавили в Fitbase, чтобы было ещё легче</li>
+    </ul>
+
+    <div class="qkey">
+      <span class="qkey-label">★ Личный вопрос</span>
+      Если бы все клиенты были на подписке — это было бы хорошо или нет? Почему?
     </div>
   </div>
 
-  <!-- Q7 -->
+  <!-- ============================================================ Q7 -->
   <div class="qcard">
     <div class="qhead">
       <div class="qnum">7</div>
       <div class="qtopic topic-advice">Совет другим клубам</div>
+      <div class="qduration">≈ 2 мин</div>
     </div>
-    <div class="qbody">
-      Что бы вы сказали другому клубу, который сейчас думает о подписке? Что бы сделали по-другому, если бы начинали заново? И кому такая модель НЕ подходит?
+    <div class="qmain">
+      Что бы вы сказали другому клубу, который сейчас думает о подписке?
+    </div>
+
+    <div class="qsub">Главное в финальном совете</div>
+    <ul class="qbullets">
+      <li>Самая важная вещь, которую упустили на старте — и стали бы делать сначала</li>
+      <li>3 главные ошибки, которые могла бы избежать студия / клуб</li>
+      <li>Кому подписка подходит — кто получит максимум</li>
+      <li>Кому НЕ подходит — кто должен остаться на разовых</li>
+      <li>Что бы вы сделали по-другому, если бы начинали заново</li>
+    </ul>
+
+    <div class="qcite">
+      <span class="qcite-label">🔊 Это финал кейса — самая цитируемая часть</span>
+      Совет от первого лица — то, что читатели разносят по соцсетям. Можно сказать прямо, как будто другому собственнику клуба в чате.
     </div>
   </div>
 
+  <!-- THANKS + CONTACT -->
   <div class="thanks">
     <h2>🙏 Спасибо, Алексей!</h2>
     <p>
-      Если по ходу вспомните детали или цифры — просто отдельным голосовым. Кейс публикуем не раньше, чем согласуем с вами.
+      Если по ходу вспомните детали, цифры или истории — просто отдельным голосовым, не стесняйтесь.
+      Кейс публикуем не раньше, чем согласуем с вами.
     </p>
     <a href="https://t.me/Roman_Semenov" class="contact">→ Прислать голосовые в Telegram</a>
   </div>
