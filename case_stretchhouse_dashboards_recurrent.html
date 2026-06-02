@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кейс: студия Stretch House — дашборды и рекурренты</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+    color: #1a1d24;
+    background: #f5f6f8;
+    line-height: 1.55;
+    font-size: 15px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* TOP / TIMER */
+  .top {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #e4e6eb;
+    padding: 14px 24px;
+    margin-bottom: 24px;
+  }
+  .top-inner { max-width: 980px; margin: 0 auto; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .title-row { flex: 1; min-width: 260px; }
+  .title { font-size: 15px; font-weight: 700; line-height: 1.3; }
+  .subtitle { font-size: 12px; color: #6b7280; margin-top: 2px; }
+  .timer-box {
+    display: flex; align-items: center; gap: 8px;
+    background: #1a1d24; color: white;
+    padding: 8px 14px; border-radius: 100px;
+    font-weight: 600; font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  .timer-box.warn { background: #b8580a; }
+  .timer-box.crit { background: #c4302b; }
+  .timer-btn {
+    background: rgba(255,255,255,0.18);
+    border: none; color: white;
+    padding: 4px 10px; border-radius: 100px;
+    font-size: 11px; font-weight: 600; cursor: pointer;
+    letter-spacing: 0.3px;
+  }
+  .timer-btn:hover { background: rgba(255,255,255,0.28); }
+
+  .nav { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .nav a {
+    text-decoration: none; font-size: 11px; color: #6b7280;
+    background: #eef0f3; padding: 4px 10px; border-radius: 100px;
+    font-weight: 500;
+  }
+  .nav a:hover { background: #e0e3e8; color: #1a1d24; }
+  .nav a.done { background: #d4f4dd; color: #207533; }
+
+  /* INTRO + METHODOLOGY */
+  .intro {
+    background: white; border-radius: 16px;
+    padding: 22px 26px; margin-bottom: 16px;
+    border: 1px solid #e4e6eb;
+  }
+  .intro h1 { font-size: 22px; line-height: 1.25; font-weight: 700; margin-bottom: 8px; }
+  .intro .stem {
+    background: #ecf3ff; border-left: 3px solid #2563eb;
+    padding: 12px 14px; border-radius: 6px;
+    margin-top: 10px; font-size: 14px;
+  }
+
+  /* METHODOLOGY CARD — STICKY REMINDER */
+  .method {
+    background: #fef9c3;
+    border: 2px solid #fde047;
+    border-radius: 14px;
+    padding: 18px 24px;
+    margin-bottom: 20px;
+  }
+  .method h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #92400e;
+    margin-bottom: 10px;
+    font-weight: 800;
+  }
+  .method-text {
+    color: #422006; font-size: 14px; margin-bottom: 12px; line-height: 1.5;
+  }
+  .method-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 8px;
+  }
+  .method-step {
+    background: white;
+    border-radius: 10px;
+    padding: 10px 14px;
+    border: 1px solid #fde047;
+  }
+  .method-step-num {
+    font-size: 10px; color: #92400e;
+    font-weight: 800; letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+  .method-step-q { font-size: 13px; color: #422006; font-weight: 600; }
+  .method-warning {
+    background: #fef2f2;
+    border-left: 3px solid #c4302b;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #7f1d1d;
+  }
+
+  /* SECTIONS */
+  .section {
+    background: white; border-radius: 14px;
+    padding: 22px 26px; margin-bottom: 16px;
+    border: 1px solid #e4e6eb;
+  }
+  .section-head {
+    display: flex; align-items: center; gap: 12px;
+    flex-wrap: wrap; margin-bottom: 14px;
+  }
+  .time-tag {
+    font-size: 11px; font-weight: 700;
+    background: #1a1d24; color: white;
+    padding: 4px 10px; border-radius: 100px;
+    letter-spacing: 0.5px;
+    font-variant-numeric: tabular-nums;
+  }
+  .duration {
+    font-size: 11px; color: #6b7280;
+    background: #eef0f3; padding: 3px 9px;
+    border-radius: 100px; font-weight: 600;
+  }
+  h2 { font-size: 19px; font-weight: 700; line-height: 1.3; flex: 1; min-width: 200px; }
+
+  /* SECTION COLORS */
+  .pointA { border-left: 4px solid #c4302b; }
+  .dashboards { border-left: 4px solid #2563eb; }
+  .recurrent { border-left: 4px solid #b8580a; }
+  .pointB { border-left: 4px solid #207533; }
+  .advice { border-left: 4px solid #db2777; }
+
+  /* ENTRY QUESTION (MAIN PROMPT) */
+  .entry {
+    font-size: 15.5px; font-weight: 600; color: #1a1d24;
+    padding: 14px 18px; background: #f7f9fb;
+    border-radius: 10px; margin: 8px 0 16px;
+    border-left: 3px solid #2563eb;
+  }
+  .entry::before {
+    content: "▶ ВХОД В БЛОК";
+    display: block; font-size: 10px;
+    letter-spacing: 1px; color: #2563eb;
+    font-weight: 700; margin-bottom: 6px;
+  }
+
+  /* 5-QUESTION PATTERN */
+  .pattern {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+    margin: 12px 0;
+  }
+  .pq {
+    background: #f7f9fb;
+    border-radius: 10px;
+    padding: 12px 14px;
+    border-top: 3px solid #9ca3af;
+  }
+  .pq-num {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: #6b7280;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .pq-q {
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: #1a1d24;
+    font-weight: 600;
+  }
+
+  .pq-1 { border-top-color: #2563eb; }
+  .pq-2 { border-top-color: #047857; }
+  .pq-3 { border-top-color: #b8580a; }
+  .pq-4 { border-top-color: #c4302b; }
+  .pq-5 { border-top-color: #db2777; }
+
+  /* KEY MOMENT BOX (CITATION HUNT) */
+  .moment {
+    background: #fdf2f8;
+    border-left: 3px solid #db2777;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 14px 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #1a1d24;
+  }
+  .moment-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    color: #be185d;
+    font-weight: 700;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  /* SUB-SECTIONS INSIDE BLOCKS */
+  h3.sub {
+    font-size: 13px; margin: 18px 0 8px;
+    color: #6b7280; text-transform: uppercase;
+    letter-spacing: 0.6px; font-weight: 700;
+  }
+
+  /* CHECKLISTS */
+  .checklist {
+    margin: 10px 0; padding: 12px 14px;
+    background: #f7f9fb; border-radius: 8px;
+  }
+  .checklist.important { background: #fef2f2; border: 1px solid #fecaca; }
+  .checklist label {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 4px 0; cursor: pointer; font-size: 13.5px;
+  }
+  .checklist input[type=checkbox] { margin-top: 3px; cursor: pointer; }
+
+  /* NOTES */
+  .note-area { margin-top: 14px; }
+  .note-area label {
+    display: block; font-size: 11px;
+    text-transform: uppercase; color: #6b7280;
+    font-weight: 700; letter-spacing: 0.6px; margin-bottom: 4px;
+  }
+  .note-area textarea {
+    width: 100%; min-height: 90px;
+    padding: 10px 12px;
+    border: 1px solid #d6d9df; border-radius: 8px;
+    font: inherit; font-size: 13.5px;
+    line-height: 1.5; resize: vertical;
+    background: #fafbfc;
+  }
+  .note-area textarea:focus { outline: 2px solid #2563eb33; background: white; }
+  .note-area.cite textarea {
+    background: #fdf2f8; border-color: #fbcfe8;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 13px;
+  }
+  .note-area.numbers textarea {
+    background: #ecfdf5; border-color: #a7f3d0;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  /* DASHBOARD CARDS */
+  .dash-list {
+    margin: 14px 0;
+    border-radius: 12px;
+    background: #ecf3ff;
+    padding: 16px 18px;
+  }
+  .dash-list-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: #1e40af;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .dash-list ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px;
+  }
+  .dash-list li {
+    background: white;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #1e3a8a;
+    font-weight: 500;
+  }
+
+  /* TIP BOX */
+  .tip {
+    background: #ecfdf5;
+    border-left: 3px solid #047857;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 10px 0;
+    font-size: 13px;
+    color: #064e3b;
+    line-height: 1.5;
+  }
+  .tip strong { color: #042f1e; }
+
+  /* RULES */
+  .rules {
+    background: #1a1d24; color: white;
+    border-radius: 14px; padding: 22px 26px; margin-top: 24px;
+  }
+  .rules h2 { color: white; margin-bottom: 14px; }
+  .rules ol { padding-left: 22px; }
+  .rules li { margin: 8px 0; font-size: 13.5px; color: #d6d9df; }
+  .rules strong { color: white; }
+
+  /* MIN BLOCK */
+  .min-block {
+    background: #fef2f2; border: 1px solid #fecaca;
+    border-radius: 12px; padding: 18px 22px; margin-top: 20px;
+  }
+  .min-block h3 {
+    color: #c4302b; font-size: 14px;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    margin-bottom: 10px;
+  }
+  .min-block ol { padding-left: 22px; }
+  .min-block li { margin: 6px 0; font-size: 14px; }
+
+  /* PRINT */
+  @media print {
+    body { background: white; font-size: 11pt; }
+    .top { position: static; }
+    .timer-box, .nav { display: none; }
+    .section { break-inside: avoid; }
+    textarea { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 0 12px 60px; }
+    .section { padding: 16px 18px; border-radius: 12px; }
+    h2 { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-inner">
+    <div class="title-row">
+      <div class="title">Кейс: студия Stretch House — дашборды + переход на рекурренты</div>
+      <div class="subtitle">40 минут · публикуемый кейс · по Замесину · никаких подсказок</div>
+    </div>
+    <div class="timer-box" id="timerBox">
+      <span id="timerVal">00:00</span>
+      <button class="timer-btn" id="btnStart">Старт</button>
+      <button class="timer-btn" id="btnReset">Сброс</button>
+    </div>
+  </div>
+  <div class="top-inner">
+    <div class="nav">
+      <a href="#setup">0:00 Установка</a>
+      <a href="#context">0:03 Контекст</a>
+      <a href="#pointA">0:08 Точка А</a>
+      <a href="#dashboards">0:14 Дашборды + Андрей</a>
+      <a href="#recurrent">0:22 Рекурренты</a>
+      <a href="#pointB">0:30 Точка Б</a>
+      <a href="#advice">0:35 Совет</a>
+      <a href="#closing">0:38 Закрытие</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="intro">
+  <h1>Двойной кейс: дашборды (с Андреем) + переход на рекурренты</h1>
+  <div class="stem">
+    🎯 <strong>Двойной нарратив:</strong> аналитика Fitbase + Андрей помогли увидеть бизнес → собственница приняла решение идти в рекурренты. Кейс публикуемый — собираем цитаты, цифры, моменты «впервые увидела...».
+  </div>
+</div>
+
+<!-- METHODOLOGY REMINDER -->
+<div class="method">
+  <h3>⚠️ ПРАВИЛО ИНТЕРВЬЮ — Не подсказываем ответы</h3>
+  <div class="method-text">
+    На каждом ключевом узле задаём 5 вопросов <strong>в одном и том же порядке</strong>. Никаких «прокапывай: А? Б? В?» — пусть собеседник сам сформулирует.
+  </div>
+  <div class="method-grid">
+    <div class="method-step">
+      <div class="method-step-num">1 · ФАКТ</div>
+      <div class="method-step-q">Как вы это делали?</div>
+    </div>
+    <div class="method-step">
+      <div class="method-step-num">2 · ОЦЕНКА</div>
+      <div class="method-step-q">Насколько вы это оцениваете?</div>
+    </div>
+    <div class="method-step">
+      <div class="method-step-num">3 · КОНТЕКСТ</div>
+      <div class="method-step-q">Почему такая оценка?</div>
+    </div>
+    <div class="method-step">
+      <div class="method-step-num">4 · ГЭП</div>
+      <div class="method-step-q">Что в этом сложного?</div>
+    </div>
+    <div class="method-step">
+      <div class="method-step-num">5 · ИДЕАЛ</div>
+      <div class="method-step-q">Как бы вы хотели, чтобы был результат?</div>
+    </div>
+  </div>
+  <div class="method-warning">
+    <strong>Чего НЕ делаем:</strong> не говорим «может быть, X?» / «возможно, Y?». Не предлагаем готовые варианты ответа. Молчание 7 секунд после ответа — часто добавит больше.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<section class="section" id="setup">
+  <div class="section-head">
+    <span class="time-tag">0:00 — 0:03</span>
+    <span class="duration">3 мин</span>
+    <h2>Установка + разрешения</h2>
+  </div>
+  <div class="entry">
+    «Спасибо, что согласились. Я Роман из Fitbase. Делаем материал о том, как ваша студия работает с аналитикой и как идёт переход к рекуррентам. По времени — 40 минут. С вашего разрешения веду запись».
+  </div>
+  <div class="checklist important">
+    <strong style="display: block; margin-bottom: 6px; font-size: 12px; color: #c4302b; letter-spacing: 0.5px;">⚠️ ПРОГОВОРИТЬ ДО ВОПРОСОВ</strong>
+    <label><input type="checkbox"> Согласие на запись (вслух)</label>
+    <label><input type="checkbox"> Согласие на использование имени студии в кейсе</label>
+    <label><input type="checkbox"> Согласие на ваше имя как ЛПР</label>
+    <label><input type="checkbox"> Согласие на цитирование (с согласованием / без)</label>
+    <label><input type="checkbox"> Согласие на фото студии / скриншоты дашбордов</label>
+    <label><input type="checkbox"> Уточнить: цифры — абсолютные можно или только в %</label>
+    <label><input type="checkbox"> Согласие на упоминание Андрея и команды аналитики</label>
+  </div>
+  <div class="note-area">
+    <label>Заметки по разрешениям</label>
+    <textarea data-key="consent" placeholder="Что разрешили, на каких условиях..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section" id="context">
+  <div class="section-head">
+    <span class="time-tag">0:03 — 0:08</span>
+    <span class="duration">5 мин</span>
+    <h2>Контекст: студия и собственница</h2>
+  </div>
+  <div class="entry">
+    «Расскажите коротко про студию — что за формат, размер, и как вы стали собственником».
+  </div>
+  <div class="tip">
+    💡 <strong>Контекстный нюанс:</strong> Stretch House как франшиза прошла через кризис. Уточнить: студия была во франшизе? Когда выкупили? Под брендом остаётесь или работаете отдельно? Был ли долговой груз от предыдущего собственника?
+  </div>
+  <div class="note-area">
+    <label>Заметки о студии</label>
+    <textarea data-key="ctx" placeholder="Город · направление · размер · история покупки · отношения с франшизой · текущая роль..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section pointA" id="pointA">
+  <div class="section-head">
+    <span class="time-tag">0:08 — 0:14</span>
+    <span class="duration">6 мин</span>
+    <h2>🔴 ТОЧКА А: классическая модель и аналитика «в Excel»</h2>
+  </div>
+
+  <div class="entry">
+    «Расскажите, как вы видели свой бизнес ДО того, как подключили дашборды. Какая была модель тарифов, на что смотрели каждую неделю как собственник?»
+  </div>
+
+  <div class="pattern">
+    <div class="pq pq-1">
+      <div class="pq-num">1 · Факт</div>
+      <div class="pq-q">Как вы это делали — как смотрели на бизнес?</div>
+    </div>
+    <div class="pq pq-2">
+      <div class="pq-num">2 · Оценка</div>
+      <div class="pq-q">Насколько оцениваете прозрачность по 10-балльной?</div>
+    </div>
+    <div class="pq pq-3">
+      <div class="pq-num">3 · Почему</div>
+      <div class="pq-q">Почему именно такая оценка?</div>
+    </div>
+    <div class="pq pq-4">
+      <div class="pq-num">4 · Сложное</div>
+      <div class="pq-q">Что в этом было сложного?</div>
+    </div>
+    <div class="pq pq-5">
+      <div class="pq-num">5 · Идеал</div>
+      <div class="pq-q">Как бы вы хотели, чтобы это работало?</div>
+    </div>
+  </div>
+
+  <div class="moment">
+    <span class="moment-label">🔊 Конкретная сцена для лида статьи</span>
+    «Был момент или ситуация, после которой стало понятно — "так дальше не получится, нужна другая работа с цифрами"?»
+  </div>
+
+  <div class="note-area cite">
+    <label>🔊 Цитаты ТОЧКА А</label>
+    <textarea data-key="cite-A" placeholder="«...»"></textarea>
+  </div>
+  <div class="note-area numbers">
+    <label>📊 Цифры ТОЧКА А</label>
+    <textarea data-key="num-A" placeholder="Размер базы до · выручка/мес · отчёты в Excel · что считалось руками..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section dashboards" id="dashboards">
+  <div class="section-head">
+    <span class="time-tag">0:08 — 0:22</span>
+    <span class="duration">8 мин</span>
+    <h2>🔵 ДАШБОРДЫ + Андрей · главный блок 1</h2>
+  </div>
+
+  <div class="entry">
+    «Расскажите, как вы пришли к подключению дашбордов от аналитики Fitbase. Кто и когда это инициировал?»
+  </div>
+
+  <h3 class="sub">Подключение — как это происходило</h3>
+  <div class="pattern">
+    <div class="pq pq-1">
+      <div class="pq-num">1 · Факт</div>
+      <div class="pq-q">Как происходило подключение и работа с Андреем?</div>
+    </div>
+    <div class="pq pq-2">
+      <div class="pq-num">2 · Оценка</div>
+      <div class="pq-q">Насколько оцениваете процесс 1–10?</div>
+    </div>
+    <div class="pq pq-3">
+      <div class="pq-num">3 · Почему</div>
+      <div class="pq-q">Почему такая оценка?</div>
+    </div>
+    <div class="pq pq-4">
+      <div class="pq-num">4 · Сложное</div>
+      <div class="pq-q">Что было сложным в подключении?</div>
+    </div>
+    <div class="pq pq-5">
+      <div class="pq-num">5 · Идеал</div>
+      <div class="pq-q">Как бы хотели, чтобы это было ещё лучше?</div>
+    </div>
+  </div>
+
+  <div class="dash-list">
+    <div class="dash-list-label">Какие дашборды она знает (для уточнения — НЕ подсказывать, спросить «какие у вас сейчас работают»)</div>
+    <ul>
+      <li>Реализация vs касса</li>
+      <li>Маркетинг и лиды</li>
+      <li>Удержание / отток</li>
+      <li>Расписание и нагрузка (умное расписание)</li>
+      <li>Тренеры — занятость и эффективность</li>
+      <li>Финрез по студиям / сети</li>
+      <li>Конверсия пробное → постоянный</li>
+      <li>ARPU / LTV</li>
+      <li>Другое</li>
+    </ul>
+  </div>
+
+  <h3 class="sub">По каждому ключевому дашборду — те же 5 вопросов</h3>
+  <div class="entry">
+    «Из того, что у вас сейчас работает, какой дашборд для вас самый важный?»
+  </div>
+  <div class="pattern">
+    <div class="pq pq-1">
+      <div class="pq-num">1 · Факт</div>
+      <div class="pq-q">Как вы им пользуетесь, как часто?</div>
+    </div>
+    <div class="pq pq-2">
+      <div class="pq-num">2 · Оценка</div>
+      <div class="pq-q">Насколько он важен и полезен — 1–10?</div>
+    </div>
+    <div class="pq pq-3">
+      <div class="pq-num">3 · Почему</div>
+      <div class="pq-q">Почему именно эта оценка?</div>
+    </div>
+    <div class="pq pq-4">
+      <div class="pq-num">4 · Сложное</div>
+      <div class="pq-q">Что в нём не хватает или сложно использовать?</div>
+    </div>
+    <div class="pq pq-5">
+      <div class="pq-num">5 · Идеал</div>
+      <div class="pq-q">Как бы вы хотели, чтобы он работал?</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    💡 <strong>Повторяй эти 5 вопросов</strong> для 2–3 ключевых дашбордов (если позволяет время). Это даёт нам приоритизированный список фич — какие реально используются, какие нет.
+  </div>
+
+  <div class="moment">
+    <span class="moment-label">🔊 Сцена для лида статьи — обязательно спросить</span>
+    «Был ли момент, когда вы впервые открыли дашборд и увидели что-то, что раньше не видели? Что это было?»
+  </div>
+
+  <div class="moment">
+    <span class="moment-label">🔊 Про Андрея и команду аналитики</span>
+    «Расскажите про работу с Андреем — что он именно делал, как взаимодействовали?»
+  </div>
+
+  <div class="note-area cite">
+    <label>🔊 Цитаты ДАШБОРДЫ + АНДРЕЙ</label>
+    <textarea data-key="cite-dash" placeholder="«...»"></textarea>
+  </div>
+  <div class="note-area numbers">
+    <label>📊 Цифры / факты ДАШБОРДЫ</label>
+    <textarea data-key="num-dash" placeholder="Какие дашборды активны · что узнала впервые · по каким частоту смотрит..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section recurrent" id="recurrent">
+  <div class="section-head">
+    <span class="time-tag">0:22 — 0:30</span>
+    <span class="duration">8 мин</span>
+    <h2>🟠 РЕКУРРЕНТЫ · главный блок 2</h2>
+  </div>
+
+  <div class="entry">
+    «Расскажите, как вы пришли к мысли о рекуррентах. С какой точки эта мысль появилась?»
+  </div>
+
+  <div class="pattern">
+    <div class="pq pq-1">
+      <div class="pq-num">1 · Факт</div>
+      <div class="pq-q">Как вы это делали — как принимали решение?</div>
+    </div>
+    <div class="pq pq-2">
+      <div class="pq-num">2 · Оценка</div>
+      <div class="pq-q">Насколько готовы к переходу 1–10?</div>
+    </div>
+    <div class="pq pq-3">
+      <div class="pq-num">3 · Почему</div>
+      <div class="pq-q">Почему именно такая оценка?</div>
+    </div>
+    <div class="pq pq-4">
+      <div class="pq-num">4 · Сложное</div>
+      <div class="pq-q">Что в этом сейчас сложно?</div>
+    </div>
+    <div class="pq pq-5">
+      <div class="pq-num">5 · Идеал</div>
+      <div class="pq-q">Как бы вы хотели, чтобы переход прошёл?</div>
+    </div>
+  </div>
+
+  <h3 class="sub">Связь с дашбордами</h3>
+  <div class="entry">
+    «Помогли ли дашборды прийти к этой мысли? Если да — как?»
+  </div>
+  <div class="tip">
+    💡 Это ключевой узел кейса — связь двух историй. Если она сама сформулирует «я увидела на дашборде → решила про рекурренты» — это нарратив статьи. <strong>Не подсказываем.</strong>
+  </div>
+
+  <h3 class="sub">Состояние сейчас и ожидания</h3>
+  <div class="entry">
+    «На каком этапе перехода вы сейчас? И что вы от этого ждёте?»
+  </div>
+  <div class="pattern">
+    <div class="pq pq-1">
+      <div class="pq-num">1 · Факт</div>
+      <div class="pq-q">Где вы сейчас в процессе перехода?</div>
+    </div>
+    <div class="pq pq-2">
+      <div class="pq-num">2 · Оценка</div>
+      <div class="pq-q">Насколько вы оцениваете готовность 1–10?</div>
+    </div>
+    <div class="pq pq-3">
+      <div class="pq-num">3 · Почему</div>
+      <div class="pq-q">Почему такая оценка?</div>
+    </div>
+    <div class="pq pq-4">
+      <div class="pq-num">4 · Сложное</div>
+      <div class="pq-q">Что сейчас самое сложное?</div>
+    </div>
+    <div class="pq pq-5">
+      <div class="pq-num">5 · Идеал</div>
+      <div class="pq-q">Идеальный сценарий через год — каким видите?</div>
+    </div>
+  </div>
+
+  <div class="moment">
+    <span class="moment-label">🔊 Конкретная сцена для статьи</span>
+    «Какая первая реакция была у клиентов / тренеров на новость о переходе?»
+  </div>
+
+  <div class="note-area cite">
+    <label>🔊 Цитаты РЕКУРРЕНТЫ</label>
+    <textarea data-key="cite-rec" placeholder="«...»"></textarea>
+  </div>
+  <div class="note-area numbers">
+    <label>📊 Цифры / факты РЕКУРРЕНТЫ</label>
+    <textarea data-key="num-rec" placeholder="Этап · % выручки на подписке · первые результаты..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section pointB" id="pointB">
+  <div class="section-head">
+    <span class="time-tag">0:30 — 0:35</span>
+    <span class="duration">5 мин</span>
+    <h2>🟢 ТОЧКА Б · что меняется уже сейчас</h2>
+  </div>
+
+  <div class="entry">
+    «Если сравнить с тем, как было раньше — что для вас изменилось?»
+  </div>
+
+  <div class="pattern">
+    <div class="pq pq-1">
+      <div class="pq-num">1 · Факт</div>
+      <div class="pq-q">Что конкретно меняется в работе?</div>
+    </div>
+    <div class="pq pq-2">
+      <div class="pq-num">2 · Оценка</div>
+      <div class="pq-q">Насколько оцениваете изменения 1–10?</div>
+    </div>
+    <div class="pq pq-3">
+      <div class="pq-num">3 · Почему</div>
+      <div class="pq-q">Почему такая оценка?</div>
+    </div>
+    <div class="pq pq-4">
+      <div class="pq-num">4 · Сложное</div>
+      <div class="pq-q">Что всё ещё сложно или непонятно?</div>
+    </div>
+    <div class="pq pq-5">
+      <div class="pq-num">5 · Идеал</div>
+      <div class="pq-q">Что хотели бы добавить дальше?</div>
+    </div>
+  </div>
+
+  <div class="moment">
+    <span class="moment-label">🔊 Эмоциональный момент для финала статьи</span>
+    «Был ли момент, когда вы поняли — да, всё это работает? Какое было ощущение?»
+  </div>
+
+  <div class="note-area cite">
+    <label>🔊 Цитаты ТОЧКА Б</label>
+    <textarea data-key="cite-B" placeholder="«...»"></textarea>
+  </div>
+  <div class="note-area numbers">
+    <label>📊 Цифры ТОЧКА Б</label>
+    <textarea data-key="num-B" placeholder="Выручка · база · retention · сезонность · что освободилось..."></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section advice" id="advice">
+  <div class="section-head">
+    <span class="time-tag">0:35 — 0:38</span>
+    <span class="duration">3 мин</span>
+    <h2>💡 СОВЕТ другим студиям</h2>
+  </div>
+
+  <div class="entry">
+    «Что бы вы сказали другой студии, которая сейчас на классической модели и не пользуется аналитикой?»
+  </div>
+
+  <div class="pattern">
+    <div class="pq pq-1">
+      <div class="pq-num">1 · Факт</div>
+      <div class="pq-q">С чего бы посоветовали начать?</div>
+    </div>
+    <div class="pq pq-3">
+      <div class="pq-num">3 · Почему</div>
+      <div class="pq-q">Почему именно так?</div>
+    </div>
+    <div class="pq pq-4">
+      <div class="pq-num">4 · Сложное</div>
+      <div class="pq-q">К чему быть готовым?</div>
+    </div>
+    <div class="pq pq-5">
+      <div class="pq-num">5 · Идеал</div>
+      <div class="pq-q">Кому такая модель НЕ подходит?</div>
+    </div>
+  </div>
+
+  <div class="note-area cite">
+    <label>🔊 Цитаты СОВЕТ (для финала кейса)</label>
+    <textarea data-key="cite-adv" placeholder="«...»"></textarea>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="section" id="closing">
+  <div class="section-head">
+    <span class="time-tag">0:38 — 0:40</span>
+    <span class="duration">2 мин</span>
+    <h2>Закрытие + материалы</h2>
+  </div>
+  <div class="entry">«Что-то важное упустил, о чём хотите добавить?»</div>
+  <div class="entry">«Какие материалы могли бы прислать для кейса?»</div>
+
+  <div class="checklist important">
+    <label><input type="checkbox"> Финал — согласие на публикацию подтверждено</label>
+    <label><input type="checkbox"> Контакт для пересылки материалов</label>
+    <label><input type="checkbox"> Договорились о превью перед публикацией</label>
+    <label><input type="checkbox"> Запись сохранена локально</label>
+    <label><input type="checkbox"> Дата интервью записана</label>
+    <label><input type="checkbox"> Запросить: фото студии, скриншоты дашбордов (с разрешением), тарифную сетку</label>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<div class="rules">
+  <h2>🎯 Правила кейс-интервью по Замесину</h2>
+  <ol>
+    <li><strong>Никогда не предлагай готовые варианты ответа.</strong> Не «может быть X?», не «возможно Y?». Если собеседник сам назовёт X — фиксируй. Если нет — это уже не его ответ.</li>
+    <li><strong>5 вопросов в одном порядке</strong> на каждый узел: Как делали → Оценка 1–10 → Почему оценка → Что сложно → Как бы хотели.</li>
+    <li><strong>Молчание 7 секунд</strong> после ответа. Часто добавит больше, чем твой следующий вопрос.</li>
+    <li><strong>Если важность 8–10</strong> — обязательно «почему такая высокая?». Часто там настоящая боль.</li>
+    <li><strong>Если удовлетворённость &lt; 10</strong> — обязательно «чего не хватило до 10?». Это и есть gap.</li>
+    <li><strong>Цитаты дословно</strong>. «Я открыла дашборд и поняла, что половина моих годовых — это вообще не прибыль» сильнее любого пересказа.</li>
+    <li><strong>Сцены и конкретные моменты.</strong> «Помню, в марте на встрече с Андреем мы посмотрели...» — это и есть лид кейса.</li>
+    <li><strong>Не защищай Fitbase.</strong> Если что-то критикует — спроси «расскажите подробнее».</li>
+    <li><strong>Кейс-герой — собственница и Андрей.</strong> Не Fitbase.</li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<div class="min-block">
+  <h3>Если идёт «не туда» — минимум на 20 минут</h3>
+  <ol>
+    <li><strong>Как видели бизнес до дашбордов (1 факт + 1 оценка)</strong> — 3 мин</li>
+    <li><strong>Как происходило подключение Андрея</strong> — 3 мин</li>
+    <li><strong>Самый сильный инсайт от дашборда</strong> — 3 мин</li>
+    <li><strong>Как пришли к рекуррентам</strong> — 3 мин</li>
+    <li><strong>Связь между дашбордами и решением о рекурренте</strong> — 2 мин</li>
+    <li><strong>Что меняется сейчас (1–2 цифры)</strong> — 3 мин</li>
+    <li><strong>Совет другим</strong> — 3 мин</li>
+  </ol>
+  <p style="margin-top: 10px; font-size: 13px; color: #6b7280;">
+    Этих 7 ответов хватит на публикуемый кейс ~1500 слов с двумя сильными нарративами.
+  </p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section">
+  <h2 style="margin-bottom: 14px;">📝 Структура готового кейса</h2>
+  <ol style="padding-left: 22px; line-height: 1.8;">
+    <li><strong>Лид</strong> — сцена «впервые открыла дашборд и увидела...» (1 абзац + цитата)</li>
+    <li><strong>Студия в цифрах</strong> — шапка (название, формат, размер, история покупки)</li>
+    <li><strong>Точка А</strong> — как видела бизнес до, что считала руками (2–3 абзаца + цитата)</li>
+    <li><strong>Встреча с Андреем</strong> — как подключили аналитику (2 абзаца + цитата Андрея, если согласится)</li>
+    <li><strong>Дашборды в работе</strong> — какие сейчас используются, какой инсайт сильнее всего повлиял (3 абзаца + цифры)</li>
+    <li><strong>Решение о рекуррентах</strong> — связка с дашбордами, как пришли к этой мысли (2–3 абзаца + цитата)</li>
+    <li><strong>Сейчас и сложности</strong> — этап перехода, первые результаты, что не закрыто (3 абзаца)</li>
+    <li><strong>Совет другим</strong> — 3–5 пунктов от первого лица</li>
+    <li><strong>Финальная цитата</strong> — про «теперь я вижу свой бизнес»</li>
+    <li><strong>CTA</strong> — связаться для аналогичного перехода + ссылка на аналитику</li>
+  </ol>
+</div>
+
+<div style="text-align: center; margin-top: 24px;">
+  <button onclick="window.print()" style="background: #1a1d24; color: white; border: none; padding: 12px 24px; border-radius: 100px; font-weight: 600; cursor: pointer;">🖨 Распечатать</button>
+  <button onclick="exportNotes()" style="background: #db2777; color: white; border: none; padding: 12px 24px; border-radius: 100px; font-weight: 600; cursor: pointer; margin-left: 8px;">📋 Экспорт заметок в Markdown</button>
+  <button onclick="if(confirm('Очистить все заметки и чекбоксы?')) { localStorage.clear(); location.reload(); }" style="background: #eef0f3; color: #4d5563; border: none; padding: 12px 24px; border-radius: 100px; font-weight: 600; cursor: pointer; margin-left: 8px;">Очистить</button>
+</div>
+
+</div>
+
+<script>
+// === TIMER ===
+let secs = 0, tick = null;
+const box = document.getElementById('timerBox');
+const val = document.getElementById('timerVal');
+const btnStart = document.getElementById('btnStart');
+const btnReset = document.getElementById('btnReset');
+function render() {
+  const m = String(Math.floor(secs / 60)).padStart(2, '0');
+  const s = String(secs % 60).padStart(2, '0');
+  val.textContent = m + ':' + s;
+  box.classList.toggle('warn', secs >= 30*60 && secs < 38*60);
+  box.classList.toggle('crit', secs >= 38*60);
+}
+btnStart.addEventListener('click', () => {
+  if (tick) { clearInterval(tick); tick = null; btnStart.textContent = 'Старт'; }
+  else { tick = setInterval(() => { secs++; render(); }, 1000); btnStart.textContent = 'Пауза'; }
+});
+btnReset.addEventListener('click', () => {
+  clearInterval(tick); tick = null; secs = 0; render(); btnStart.textContent = 'Старт';
+});
+render();
+
+// === NOTES PERSISTENCE ===
+document.querySelectorAll('textarea[data-key]').forEach(t => {
+  const k = 'note_sh_' + t.dataset.key;
+  const saved = localStorage.getItem(k);
+  if (saved) t.value = saved;
+  t.addEventListener('input', () => localStorage.setItem(k, t.value));
+});
+
+// === CHECKBOX PERSISTENCE ===
+document.querySelectorAll('input[type=checkbox]').forEach((c, i) => {
+  const k = 'chk_sh_' + i;
+  c.checked = localStorage.getItem(k) === '1';
+  c.addEventListener('change', () => localStorage.setItem(k, c.checked ? '1' : '0'));
+});
+
+// === NAV PROGRESS ===
+const sections = document.querySelectorAll('.section[id]');
+const navLinks = document.querySelectorAll('.nav a');
+window.addEventListener('scroll', () => {
+  sections.forEach((sec, i) => {
+    const rect = sec.getBoundingClientRect();
+    if (rect.bottom < 200 && navLinks[i]) navLinks[i].classList.add('done');
+  });
+});
+
+// === EXPORT NOTES TO MARKDOWN ===
+function exportNotes() {
+  const labels = {
+    'consent': 'Разрешения',
+    'ctx': 'Студия — контекст',
+    'cite-A': 'Цитаты ТОЧКА А',
+    'num-A': 'Цифры ТОЧКА А',
+    'cite-dash': 'Цитаты ДАШБОРДЫ + АНДРЕЙ',
+    'num-dash': 'Цифры ДАШБОРДЫ',
+    'cite-rec': 'Цитаты РЕКУРРЕНТЫ',
+    'num-rec': 'Цифры РЕКУРРЕНТЫ',
+    'cite-B': 'Цитаты ТОЧКА Б',
+    'num-B': 'Цифры ТОЧКА Б',
+    'cite-adv': 'Цитаты СОВЕТ',
+  };
+  const now = new Date().toISOString().slice(0, 10);
+  let md = '# Кейс-интервью: студия Stretch House — дашборды + рекурренты\n\n';
+  md += '*Дата: ' + now + '*\n\n---\n\n';
+  for (const [k, label] of Object.entries(labels)) {
+    const val = localStorage.getItem('note_sh_' + k) || '';
+    if (val.trim()) md += '## ' + label + '\n\n' + val + '\n\n';
+  }
+  const blob = new Blob([md], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'case_stretchhouse_' + now + '.md';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>
